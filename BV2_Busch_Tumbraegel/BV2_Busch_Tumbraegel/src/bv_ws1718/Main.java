@@ -12,14 +12,13 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 
-
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PerspectiveAppView.fxml"));
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Perspective - <Busch_Tumbraegel>"); // TODO: add your name(s)
+		primaryStage.setTitle("Perspective - Busch, Tumbraegel"); // TODO: add your name(s)
 		primaryStage.show();
 	}
 	

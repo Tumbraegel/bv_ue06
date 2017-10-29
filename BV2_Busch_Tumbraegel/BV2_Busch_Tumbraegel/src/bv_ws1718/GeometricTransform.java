@@ -37,6 +37,22 @@ public class GeometricTransform {
 
 	}
 
+	public void copy(RasterImage src, RasterImage dst) {
+		for (int dstY = 0; dstY < dst.height; dstY++) {
+			for (int dstX = 0; dstX < dst.width; dstX++) {
+				float dstYNew = Math.round(dstY - (dst.height / 2f));
+				float dstXNew = Math.round(dstX - (dst.width / 2f));
+				int srcY = (int)Math.round(dstYNew + (src.height /2f));
+				int srcX = (int)Math.round(dstXNew + (src.width/2f));
+				if(srcY >= 0 && srcY < src.height && srcX >= 0 && srcX < src.width) {
+					dst.argb[dstY * dst.width + dstX] = src.argb[srcY * src.width + srcX];
+				}else {
+					dst.argb[dstY * dst.width + dstX] = 0xff000000 | (255 << 16) | (255 << 8) | (255);
+				}
+			}
+		}
+	}
+
 	/**
 	 * @param src
 	 *            source image
@@ -52,9 +68,31 @@ public class GeometricTransform {
 		// TODO: implement the geometric transformation using nearest neighbour image
 		// rendering
 
+		// get origin to middle of picture
+		for (int dstY = 0; dstY < dst.height; dstY++) {
+			for (int dstX = 0; dstX < dst.width; dstX++) {
+				int dstYNew = dstY - (dst.height / 2);
+				int dstXNew = dstX - (dst.width / 2);
+
+				int xs = (int) (dstXNew / (Math.cos(angle) - dstXNew * perspectiveDistortion * Math.sin(angle)));
+				int ys = (int) (dstYNew * (perspectiveDistortion * Math.sin(angle) * xs + 1));
+
+				// xsNew = xs
+
+			}
+		}
+
+		// place origin back
+		for (int srcY = 0; srcY < src.height; srcY++) {
+			for (int srcX = 0; srcX < src.height; srcX++) {
+				int srcYNew = srcY + (src.height / 2);
+				int srcXNew = srcX + (src.width / 2);
+
+			}
+		}
+
 		// NOTE: angle contains the angle in degrees, whereas Math trigonometric
 		// functions need the angle in radians
-
 	}
 
 	/**
@@ -72,46 +110,6 @@ public class GeometricTransform {
 
 		// NOTE: angle contains the angle in degrees, whereas Math trigonometric
 		// functions need the angle in radians
-
-	}
-	
-//	public void copy(RasterImage src, RasterImage dst) {
-//		for (int i = 0; i < dst.argb.length; i++) {
-//			int dstYNew = (int)dst.argb[i]/dst.height;
-//			int dstXNew = dst.argb[i]%dst.height;
-//			
-//			dst.argb[i] = src.argb[i];
-//		}
-//	}
-
-	public void copy(RasterImage src, RasterImage dst) {
-		// TODO: just copy the image
-		for (int dstY = 0; dstY < dst.height; dstY++) {
-			for (int dstX = 0; dstX < dst.width; dstX++) {
-				int dstYNew = dstY - dst.height / 2;
-				int dstXNew = dstX - dst.width / 2;
-				boolean foundCorPixel = false;
-
-				 System.out.println(src.width*src.height);
-				 System.out.println(dst.width*dst.height);
-				for (int srcY = 0; srcY < src.height; srcY++) {
-					for (int srcX = 0; srcX < src.width; srcX++) {
-						int srcYNew = srcY + src.height / 2;
-						int srcXNew = srcX + src.width / 2;
-						if (srcYNew == dstYNew && srcXNew == dstXNew) {
-							int srcPixel = src.argb[srcY * src.height + srcX];
-							int dstPixel = dst.argb[dstY * dst.height + dstX];
-							dst.argb[dstY * dst.height + dstX] = src.argb[srcY * src.height + srcX];
-							foundCorPixel = true;
-						}
-					}
-				}
-				if (!foundCorPixel) {
-					dst.argb[dstY * src.height + dstX] = 0xff000000 | (255 << 16) | (255 << 8) | (255);
-				}
-
-			}
-		}
 
 	}
 
