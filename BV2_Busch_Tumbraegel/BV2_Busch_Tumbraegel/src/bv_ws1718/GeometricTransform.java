@@ -67,32 +67,33 @@ public class GeometricTransform {
 			double perspectiveDistortion) {
 		// TODO: implement the geometric transformation using nearest neighbour image
 		// rendering
+		
+		// NOTE: angle contains the angle in degrees, whereas Math trigonometric
+		// functions need the angle in radians
 
 		// get origin to middle of picture
 		for (int dstY = 0; dstY < dst.height; dstY++) {
 			for (int dstX = 0; dstX < dst.width; dstX++) {
+				//Koordinatensystem verschieben im Ziel
 				int dstYNew = dstY - (dst.height / 2);
 				int dstXNew = dstX - (dst.width / 2);
 
+				//Transfromation von den Zielkoordinaten zu den Quellkoordinaten
 				int xs = (int) (dstXNew / (Math.cos(angle) - dstXNew * perspectiveDistortion * Math.sin(angle)));
 				int ys = (int) (dstYNew * (perspectiveDistortion * Math.sin(angle) * xs + 1));
 
-				// xsNew = xs
+				//Koordinatensystem in der Quelle zurück verschieben
+				int srcY = ys + (src.height / 2);
+				int srcX = xs + (src.width / 2);
+				//Write values in dst pic
+				if(srcY >= 0 && srcY < src.height && srcX >= 0 && srcX < src.width) {
+					dst.argb[dstY * dst.width + dstX] = src.argb[srcY * src.width + srcX];
+				}else {
+					dst.argb[dstY * dst.width + dstX] = 0xff000000 | (255 << 16) | (255 << 8) | (255);
+				}
 
 			}
 		}
-
-		// place origin back
-		for (int srcY = 0; srcY < src.height; srcY++) {
-			for (int srcX = 0; srcX < src.height; srcX++) {
-				int srcYNew = srcY + (src.height / 2);
-				int srcXNew = srcX + (src.width / 2);
-
-			}
-		}
-
-		// NOTE: angle contains the angle in degrees, whereas Math trigonometric
-		// functions need the angle in radians
 	}
 
 	/**
