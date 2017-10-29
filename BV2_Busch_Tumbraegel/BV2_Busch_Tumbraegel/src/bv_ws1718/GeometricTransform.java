@@ -79,9 +79,9 @@ public class GeometricTransform {
 				int dstYNew = dstY - (dst.height / 2);
 				int dstXNew = dstX - (dst.width / 2);
 
-				//Transfromation von den Zielkoordinaten zu den Quellkoordinaten
-				int xs = (int) (dstXNew / (Math.cos(rad) - dstXNew * perspectiveDistortion * Math.sin(rad)));
-				int ys = (int) (dstYNew * (perspectiveDistortion * Math.sin(rad) * xs + 1));
+				//Transfromation von den Zielkoordinaten zu den Quellkoordinaten mit neares Neighbour
+				int xs = (int) Math.round((dstXNew / (Math.cos(rad) - dstXNew * perspectiveDistortion * Math.sin(rad))));
+				int ys = (int) Math.round((dstYNew * (perspectiveDistortion * Math.sin(rad) * xs + 1)));
 
 				//Koordinatensystem in der Quelle zurück verschieben
 				int srcY = ys + (src.height / 2);
@@ -113,6 +113,33 @@ public class GeometricTransform {
 		// NOTE: angle contains the angle in degrees, whereas Math trigonometric
 		// functions need the angle in radians
 
+		double rad = angle * Math.PI/180;
+
+		// get origin to middle of picture
+		for (int dstY = 0; dstY < dst.height; dstY++) {
+			for (int dstX = 0; dstX < dst.width; dstX++) {
+				//Koordinatensystem verschieben im Ziel
+				int dstYNew = dstY - (dst.height / 2);
+				int dstXNew = dstX - (dst.width / 2);
+
+				//Transfromation von den Zielkoordinaten zu den Quellkoordinaten
+				//durch die Runding hier, ist das Verfahren nearest Neighbour, hier sollte allerdings nun bilinear interpoliert werden
+				// TODO: Bilinear Interpolieren
+				int xs = (int) Math.round((dstXNew / (Math.cos(rad) - dstXNew * perspectiveDistortion * Math.sin(rad))));
+				int ys = (int) Math.round((dstYNew * (perspectiveDistortion * Math.sin(rad) * xs + 1)));
+
+				//Koordinatensystem in der Quelle zurück verschieben
+				int srcY = ys + (src.height / 2);
+				int srcX = xs + (src.width / 2);
+				//Write values in dst pic
+				if(srcY >= 0 && srcY < src.height && srcX >= 0 && srcX < src.width) {
+					dst.argb[dstY * dst.width + dstX] = src.argb[srcY * src.width + srcX];
+				}else {
+					dst.argb[dstY * dst.width + dstX] = 0xff000000 | (255 << 16) | (255 << 8) | (255);
+				}
+
+			}
+		}
 	}
 
 }
