@@ -220,50 +220,47 @@ public class GeometricTransform {
 					dst.argb[dstY * dst.width + dstX] = 0xff000000 | (Pr << 16) | (Pg << 8) | (Pb);
 
 				} else {
-					dst.argb[dstY * dst.width + dstX] = 0xff000000 | (255 << 16) | (255 << 8) | (255);
+					int xsFloor = (int) srcX;
+					int ysFloor = (int) srcY;
+					int xsCeil = (int) Math.ceil(srcX);
+					int ysCeil = (int) Math.ceil(srcY);
+
+					// Abstand vom berechneten Wert zum Pixel in X-Richtung (h) und Y-Richtung (v)
+					double h = srcX - xsFloor;
+					double v = srcY - ysFloor;
+
+					int A, B, C, D;
+					A = B = C = D = 0;
+
+					if (ysCeil >= 0 && ysCeil < src.height && xsFloor > 0 && xsCeil <= src.width) {
+						A = 0xff000000 | (255 << 16) | (255 << 8) | (255);
+						B = 0xff000000 | (255 << 16) | (255 << 8) | (255);
+						if (xsFloor <= 0) {
+							C = 0xff000000 | (255 << 16) | (255 << 8) | (255);
+						} else if (xsCeil > src.width) {
+							D = 0xff000000 | (255 << 16) | (255 << 8) | (255);
+						} else {
+							C = src.argb[ysCeil * src.width + xsFloor];
+							D = src.argb[ysCeil * src.width + xsCeil];
+						}
+						int[] Argb = getRGB(A);
+						int[] Brgb = getRGB(B);
+						int[] Crgb = getRGB(C);
+						int[] Drgb = getRGB(D);
+
+						int Pr = (int) ((Argb[0] * (1 - h) * (1 - v)) + (Brgb[0] * h * (1 - v))
+								+ (Crgb[0] * (1 - h) * v) + (Drgb[0] * h * v));
+						int Pg = (int) ((Argb[1] * (1 - h) * (1 - v)) + (Brgb[1] * h * (1 - v))
+								+ (Crgb[1] * (1 - h) * v) + (Drgb[1] * h * v));
+						int Pb = (int) ((Argb[2] * (1 - h) * (1 - v)) + (Brgb[2] * h * (1 - v))
+								+ (Crgb[2] * (1 - h) * v) + (Drgb[2] * h * v));
+
+						// Neuen Wert berechnen
+						dst.argb[dstY * dst.width + dstX] = 0xff000000 | (Pr << 16) | (Pg << 8) | (Pb);
+					} else {
+						dst.argb[dstY * dst.width + dstX] = 0xff000000 | (255 << 16) | (255 << 8) | (255);
+					}
 				}
-
-				// Ziel
-				// //P = A*(1-w)*(1-h) + B*(w)*(1-h) + C*(h)*(1-w) + D*w*h
-				// //perspectiveDistortion = ratio
-				//
-				// double ratioX = (double) (src.width -1) / (dst.width -1);
-				// double ratioY = (double) (src.height -1) / (dst.width - 1);
-				//
-				// int yOrig = (int)(dstYNew*ratioY);
-				// int xOrig = (int)(dstXNew*ratioX);
-				//
-				// double h = dstXNew*ratioX-xOrig;
-				// double v = dstYNew*ratioY-yOrig;
-				//
-				// int A, B, C, D;
-				// A = dst.argb[dstYNew * dst.width + dstXNew];
-				// B = dst.argb[dstYNew * dst.width + dstXNew+1];
-				// C = dst.argb[dstYNew+1 * dst.width + dstXNew];
-				// D = dst.argb[dstYNew+1 * dst.width + dstXNew+1];
-				//
-				// int[] Argb = getRGB(A);
-				// int[] Brgb = getRGB(B);
-				// int[] Crgb = getRGB(C);
-				// int[] Drgb = getRGB(D);
-				//
-				//
-				// int Pr =(int) ((Argb[0] *
-				// (1-h)*(1-v))+(Brgb[0]*h*(1-v))+(Crgb[0]*(1-h)*v)+(Drgb[0]*h*v));
-				// int Pg =(int) ((Argb[1] *
-				// (1-h)*(1-v))+(Brgb[1]*h*(1-v))+(Crgb[1]*(1-h)*v)+(Drgb[1]*h*v));
-				// int Pb =(int) ((Argb[2] *
-				// (1-h)*(1-v))+(Brgb[2]*h*(1-v))+(Crgb[2]*(1-h)*v)+(Drgb[2]*h*v));
-				//
-				// int posNew = dstYNew*dst.width + dstXNew;
-				//
-				// int xs = (int) (P / (Math.cos(rad) - posNew * perspectiveDistortion *
-				// Math.sin(rad)));
-				// int ys = (int) (P * (perspectiveDistortion * Math.sin(rad) * xs + 1));
-
-				// Koordinatensystem in der Quelle zurück verschieben
-
-				// Write values in dst pic
 
 			}
 		}
