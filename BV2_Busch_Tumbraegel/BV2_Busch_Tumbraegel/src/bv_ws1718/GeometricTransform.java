@@ -70,6 +70,7 @@ public class GeometricTransform {
 		
 		// NOTE: angle contains the angle in degrees, whereas Math trigonometric
 		// functions need the angle in radians
+		double rad = angle * Math.PI/180;
 
 		// get origin to middle of picture
 		for (int dstY = 0; dstY < dst.height; dstY++) {
@@ -79,8 +80,8 @@ public class GeometricTransform {
 				int dstXNew = dstX - (dst.width / 2);
 
 				//Transfromation von den Zielkoordinaten zu den Quellkoordinaten
-				int xs = (int) (dstXNew / (Math.cos(angle) - dstXNew * perspectiveDistortion * Math.sin(angle)));
-				int ys = (int) (dstYNew * (perspectiveDistortion * Math.sin(angle) * xs + 1));
+				int xs = (int) (dstXNew / (Math.cos(rad) - dstXNew * perspectiveDistortion * Math.sin(rad)));
+				int ys = (int) (dstYNew * (perspectiveDistortion * Math.sin(rad) * xs + 1));
 
 				//Koordinatensystem in der Quelle zurück verschieben
 				int srcY = ys + (src.height / 2);
