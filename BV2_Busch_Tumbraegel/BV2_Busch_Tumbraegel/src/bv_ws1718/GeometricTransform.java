@@ -76,18 +76,17 @@ public class GeometricTransform {
 		for (int dstY = 0; dstY < dst.height; dstY++) {
 			for (int dstX = 0; dstX < dst.width; dstX++) {
 				// Koordinatensystem verschieben im Ziel
-				int dstYNew = dstY - (dst.height / 2);
-				int dstXNew = dstX - (dst.width / 2);
+				double dstYNew = dstY - ((float)dst.height / 2.f);
+				double dstXNew = dstX - ((float)dst.width / 2.f);
 
-				// Transfromation von den Zielkoordinaten zu den Quellkoordinaten mit neares
+				// Transfromation von den Zielkoordinaten zu den Quellkoordinaten mit nearest
 				// Neighbour
-				int xs = (int) Math
-						.round((dstXNew / (Math.cos(rad) - dstXNew * perspectiveDistortion * Math.sin(rad))));
-				int ys = (int) Math.round((dstYNew * (perspectiveDistortion * Math.sin(rad) * xs + 1)));
+				double xs = (dstXNew / (Math.cos(rad) - dstXNew * perspectiveDistortion * Math.sin(rad)));
+				double ys = (dstYNew * (perspectiveDistortion * Math.sin(rad) * xs + 1));
 
 				// Koordinatensystem in der Quelle zurück verschieben
-				int srcY = ys + (src.height / 2);
-				int srcX = xs + (src.width / 2);
+				int srcY = (int)Math.floor(ys + (src.height / 2));
+				int srcX = (int)Math.floor(xs + (src.width / 2));
 				// Write values in dst pic
 				if (srcY >= 0 && srcY < src.height && srcX >= 0 && srcX < src.width) {
 					dst.argb[dstY * dst.width + dstX] = src.argb[srcY * src.width + srcX];
@@ -121,13 +120,12 @@ public class GeometricTransform {
 		for (int dstY = 0; dstY < dst.height; dstY++) {
 			for (int dstX = 0; dstX < dst.width; dstX++) {
 				// Koordinatensystem verschieben im Ziel
-				double dstYNew = (double) dstY - ((double) dst.height / 2.0);
-				double dstXNew = (double) dstX - ((double) dst.width / 2.0);
+				double dstYNew = dstY - (dst.height / 2.0);
+				double dstXNew = dstX - (dst.width / 2.0);
 
 				// Transfromation von den Zielkoordinaten zu den Quellkoordinaten
-				double xs = ((double) dstXNew
-						/ (Math.cos(rad) - (double) dstXNew * perspectiveDistortion * Math.sin(rad)));
-				double ys = (float) dstYNew * (perspectiveDistortion * Math.sin(rad) * xs + 1.0);
+				double xs = dstXNew/ (Math.cos(rad) - dstXNew * perspectiveDistortion * Math.sin(rad));
+				double ys = dstYNew * (perspectiveDistortion * Math.sin(rad) * xs + 1.0);
 
 				// Koordinaten im Original Koordinatensystem
 				double srcY = ys + (src.height / 2);
@@ -135,8 +133,8 @@ public class GeometricTransform {
 
 				if (srcY >= 0 && srcY < src.height && srcX >= 0 && srcX < src.width) {
 
-					int xsFloor = (int) srcX;
-					int ysFloor = (int) srcY;
+					int xsFloor = (int) Math.floor(srcX);
+					int ysFloor = (int) Math.floor(srcY);
 					int xsCeil = (int) Math.ceil(srcX);
 					int ysCeil = (int) Math.ceil(srcY);
 
