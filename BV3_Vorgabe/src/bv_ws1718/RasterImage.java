@@ -75,12 +75,31 @@ public class RasterImage {
 	
 	public void binarize(int threshold) {
 		// TODO: binarize the image with given threshold
+		for(int i = 0; i < this.argb.length; i++) {
+			int[] rgb = getRGB(this.argb[i]);
+			if(rgb[0] >= threshold) {
+				this.argb[i] = 0xff000000 | (255 << 16) | (255 << 8) | (255);
+			}else {
+				this.argb[i] = 0xff000000 | (0 << 16) | (0 << 8) | (0);
+			}
+		}
 	}
 	
 	public void invert() {
 		// TODO: invert the image (assuming an binary image)
+		for(int i = 0; i < this.argb.length; i++) {
+			int[] rgb = getRGB(this.argb[i]);
+			int colour =255-rgb[0];
+			this.argb[i] = 0xff000000 | (colour << 16) | (colour << 8) | (colour);
+		}
 	}
 	
-
+	public int[] getRGB(int argb) {
+		int[] rgb = new int[3];
+		rgb[0] = (argb >> 16) & 0xff;
+		rgb[1] = (argb >> 8) & 0xff;
+		rgb[2] = argb & 0xff;
+		return rgb;
+	}
 	
 }

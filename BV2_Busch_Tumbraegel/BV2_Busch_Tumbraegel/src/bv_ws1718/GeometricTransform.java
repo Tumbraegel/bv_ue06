@@ -218,8 +218,8 @@ public class GeometricTransform {
 					dst.argb[dstY * dst.width + dstX] = 0xff000000 | (Pr << 16) | (Pg << 8) | (Pb);
 
 				} else {
-					int xsFloor = (int) srcX;
-					int ysFloor = (int) srcY;
+					int xsFloor = (int) Math.floor(srcX);
+					int ysFloor = (int) Math.floor(srcY);
 					int xsCeil = (int) Math.ceil(srcX);
 					int ysCeil = (int) Math.ceil(srcY);
 
