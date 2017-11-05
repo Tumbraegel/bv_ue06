@@ -49,8 +49,8 @@ public class MorphologicFilter {
 									stampY = picY - radius + j;
 									stampX = picX - radius + k;
 								} else if (j > radius) {
-									stampY = picY + j-radius;
-									stampX = picX + k - radius;
+									stampY = picY - radius + j;
+									stampX =  picX - radius + k;
 								} else {
 									//j == radius
 									stampX = picX - radius + k;
