@@ -6,6 +6,8 @@
 
 package bv_ws1718;
 
+import java.util.Arrays;
+
 public class MorphologicFilter {
 
 	public enum FilterType {
@@ -34,6 +36,7 @@ public class MorphologicFilter {
 
 	public void dilation(RasterImage src, RasterImage dst, boolean[][] kernel) {
 		// TODO: dilate the image using the given kernel
+		Arrays.fill(dst.argb, 0xffffffff);
 		int radius = kernel.length / 2;
 		for (int picY = 0; picY < src.height; picY++) {
 			for (int picX = 0; picX < src.width; picX++) {
@@ -41,41 +44,29 @@ public class MorphologicFilter {
 				if (colour[0] == 0) {
 					for (int j = 0; j < kernel.length; j++) {
 						for (int k = 0; k < kernel[j].length; k++) {
-							int stampY = 0;
-							int stampX = 0;
+							int stampY = picY;
+							int stampX = picX;
 							if (kernel[j][k]) {
-								
-								if (j < radius) {
-									stampY = picY - radius + j;
-									stampX = picX - radius + k;
-								} else if (j > radius) {
-									stampY = picY - radius + j;
-									stampX =  picX - radius + k;
-								} else {
-									//j == radius
-									stampX = picX - radius + k;
-									stampY = picY;
-								}
-								
-								if(stampX >= 0 && stampX < dst.width && stampY >= 0 && stampY < dst.height) {
-									dst.argb[stampY*dst.width+stampX]=0xff000000 | (0 << 16) | (0 << 8) | (0);
+								stampX = picX - radius + k;
+								stampY = picY - radius + j;
+								if (stampX >= 0 && stampX < dst.width && stampY >= 0 && stampY < dst.height) {
+									dst.argb[stampY * dst.width + stampX] = 0xff000000;
 								}
 							}
 						}
 					}
-				}else {
-					dst.argb[picY*dst.width+picX]=0xff000000 | (255 << 16) | (255 << 8) | (255);
 				}
-				
+
 			}
 		}
 	}
 
 	public void erosion(RasterImage src, RasterImage dst, boolean[][] kernel) {
 		// TODO: erode the image using the given kernel
-		copy(src, dst);
-		dst.invert();
-		dilation(dst, dst, kernel);
+		RasterImage tmp = new RasterImage(dst.width, dst.height);
+		copy(src, tmp);
+		tmp.invert();
+		dilation(tmp, dst, kernel);
 		dst.invert();
 	}
 
