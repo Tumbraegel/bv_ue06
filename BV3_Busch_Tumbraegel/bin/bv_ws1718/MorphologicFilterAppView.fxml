@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * BV Ue3 WS2017/18 Vorgabe
+ *
+ * Copyright (C) 2017 by Klaus Jung
+ * All rights reserved.
+ * Date: 2017-07-15
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="800.0" maxWidth="1400.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bv_ws1718.MorphologicFilterAppController">
+   <center>
+      <GridPane hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="10.0" />
+         </BorderPane.margin>
+         <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+            <RowConstraints minHeight="130.0" valignment="TOP" vgrow="NEVER" />
+         </rowConstraints>
+         <children>
+            <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Original Image">
+               <content>
+                  <ScrollPane pannable="true">
+                     <content>
+                        <ImageView fx:id="originalImageView" pickOnBounds="true" preserveRatio="true" smooth="false" />
+                     </content>
+                  </ScrollPane>
+               </content>
+            </TitledPane>
+            <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Binary Image" GridPane.columnIndex="1">
+               <content>
+                  <ScrollPane pannable="true">
+                     <content>
+                        <ImageView fx:id="binaryImageView" pickOnBounds="true" preserveRatio="true" smooth="false" />
+                     </content>
+                  </ScrollPane>
+               </content>
+            </TitledPane>
+            <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Filtered Image" GridPane.columnIndex="2">
+               <content>
+                  <ScrollPane pannable="true">
+                     <content>
+                        <ImageView fx:id="filteredImageView" pickOnBounds="true" preserveRatio="true" smooth="false" />
+                     </content>
+                  </ScrollPane>
+               </content>
+            </TitledPane>
+            <Button mnemonicParsing="false" onAction="#openImage" prefHeight="27.0" text="Open Image" GridPane.rowIndex="1" />
+            <HBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Label prefHeight="27.0" text="Threshold:">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+                  <Slider fx:id="thresholdSlider" blockIncrement="1.0" max="256.0" maxWidth="256.0" onKeyReleased="#thresholdChanged" onMouseClicked="#thresholdChanged" onMouseDragged="#thresholdChanged" prefHeight="27.0" value="162.0" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Slider>
+                  <Label fx:id="thresholdLabel" prefHeight="27.0" prefWidth="38.0" text="162">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="20.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <children>
+                  <VBox spacing="5.0">
+                     <children>
+                        <ComboBox fx:id="filterSelection" onAction="#filterChanged" prefHeight="27.0" />
+                        <ComboBox fx:id="kernelPresetSelection" onAction="#kernelPresetChanged" prefHeight="27.0" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label text="Structure Element" textAlignment="CENTER" />
+                        <GridPane fx:id="kernelGrid" vgap="5.0">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" />
+                              <ColumnConstraints hgrow="SOMETIMES" />
+                            <ColumnConstraints hgrow="SOMETIMES" />
+                            <ColumnConstraints hgrow="SOMETIMES" />
+                              <ColumnConstraints hgrow="SOMETIMES" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints vgrow="SOMETIMES" />
+                            <RowConstraints vgrow="SOMETIMES" />
+                            <RowConstraints vgrow="SOMETIMES" />
+                            <RowConstraints vgrow="SOMETIMES" />
+                              <RowConstraints vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" selected="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" selected="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" selected="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" selected="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="1" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="2" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="3" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.rowIndex="1" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.rowIndex="2" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.rowIndex="3" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.rowIndex="4" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="4" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                              <CheckBox mnemonicParsing="false" onAction="#kernelChanged" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </GridPane>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+   </center>
+   <bottom>
+      <Label fx:id="messageLabel" text="Message Label" BorderPane.alignment="CENTER" />
+   </bottom>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</BorderPane>
