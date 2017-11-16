@@ -81,12 +81,21 @@ public class RasterImage {
 	// image point operations to be added here
 
 	public void convertToGray() {
-		// TODO: convert the image to grayscale
+		//convert image to grayscale
+		for(int i = 0; i < argb.length; i++) {
+			int r = (argb[i] >> 16) & 0xff;
+			int g = (argb[i] >> 8) & 0xff;
+			int b = (argb[i]) & 0xff;
+			
+			int gray = (r+g+b)/3;
+			
+			argb[i] = 0xff000000 | (gray << 16) | (gray << 8) | (gray); 
+		}
 		
 	}
 	
 	public void applyToneCurve(ToneCurve curve) {
-		// TODO: apply the gray value mapping using the tone curve's mappedGray() method
+		
 		
 	}
 	

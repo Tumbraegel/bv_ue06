@@ -19,7 +19,7 @@ public class Main extends Application {
 		BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("ImageAnalysisAppView.fxml"));
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Image Analysis - <Busch - Tumbraegel>"); // TODO: add your name(s)
+		primaryStage.setTitle("Image Analysis - <Busch - Tumbraegel>"); //add your name(s)
 		primaryStage.show();
 	}
 	

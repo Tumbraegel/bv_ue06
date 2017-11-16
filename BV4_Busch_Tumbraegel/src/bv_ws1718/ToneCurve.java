@@ -35,7 +35,7 @@ public class ToneCurve {
 	}
 
 	private void updateTable() {
-		// TODO: Fill the grayTable[] array to map gay input values to gray output values.
+		// Fill the grayTable[] array to map gay input values to gray output values.
 		// It will be used as follows: grayOut = grayTable[grayIn].
 		//
 		// Use brightness and gamma values.
@@ -56,7 +56,7 @@ public class ToneCurve {
 		gc.setStroke(Color.BLUE);
 		gc.setLineWidth(3);
 
-		// TODO: draw the tone curve into the gc graphic context
+		// draw the tone curve into the gc graphic context
 
 		// Remark: This is some dummy code to give you an idea for graphics drawing with pathes		
 		gc.beginPath();

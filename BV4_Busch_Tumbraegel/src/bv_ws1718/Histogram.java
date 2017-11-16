@@ -27,7 +27,7 @@ public class Histogram {
 	}
 	
 	public void update(RasterImage image, Rectangle selectionRect, ObservableList<StatsProperty> statsData) {
-		// TODO: calculate histogram[] out of the gray values found in the image's selectionRect
+		
 		
 		histogram[0] = 0; // remove this line when implementing the proper calculations
 		
@@ -39,7 +39,7 @@ public class Histogram {
 		gc.clearRect(0, 0, grayLevels, maxHeight);
 		gc.setLineWidth(1);
 
-		// TODO: draw histogram[] into the gc graphic context
+		//draw histogram[] into the gc graphic context
 		
 		// Remark: This is some dummy code to give you an idea for graphics drawing		
 		double shift = 0.5;
