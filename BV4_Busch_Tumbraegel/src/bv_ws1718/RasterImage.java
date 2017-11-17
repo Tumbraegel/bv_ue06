@@ -95,7 +95,12 @@ public class RasterImage {
 	}
 	
 	public void applyToneCurve(ToneCurve curve) {
-		
+		// apply the gray value mapping using the tone curve's mappedGray() 
+		for(int i = 0; i < argb.length; i++) {
+			int grayIn = (argb[i] >> 16) & 0xff;
+			int grayOut = curve.mappedGray(grayIn);
+			argb[i] = 0xff000000 | (grayOut << 16) | (grayOut << 8) | (grayOut);
+		}
 		
 	}
 	

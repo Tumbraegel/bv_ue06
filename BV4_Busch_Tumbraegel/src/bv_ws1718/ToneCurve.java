@@ -43,8 +43,20 @@ public class ToneCurve {
 		// http://home.htw-berlin.de/~barthel/veranstaltungen/GLDM/vorlesungen/04_GLDM_Bildmanipulation1_Bildpunktoperatoren.pdf
 		//
 		// First apply the brightness change, afterwards the gamma correction.
-		
-		
+		for(int grayScale = 0; grayScale < grayTable.length; grayScale++) {
+//			grayTable[grayScale] = grayScale;
+			 int brightnessChangedGray = (int) ((grayScale - 127.5) + 127.5 + brightness);
+			 int gammaChangedGray = (int) Math.round(((255*(Math.pow(brightnessChangedGray, (1/gamma))))/(Math.pow(255, (1/gamma)))));
+			 
+			 if(gammaChangedGray <= 0) {
+				 grayTable[grayScale] = 0;
+			 } else if(gammaChangedGray >= 255) {
+				 grayTable[grayScale] = 255;
+			 }else {
+				 grayTable[grayScale] = gammaChangedGray;
+			 }
+			 
+		}		
 	}
 	
 	public int mappedGray(int inputGray) {
@@ -52,18 +64,25 @@ public class ToneCurve {
 	}
 	
 	public void draw() {
+		updateTable();
 		gc.clearRect(0, 0, grayLevels, grayLevels);
-		gc.setStroke(Color.BLUE);
+		gc.setStroke(Color.DARKGREEN);
 		gc.setLineWidth(3);
 
 		// draw the tone curve into the gc graphic context
-
-		// Remark: This is some dummy code to give you an idea for graphics drawing with pathes		
 		gc.beginPath();
-		gc.moveTo(0, 128);
-		gc.lineTo(64, brightness);
-		gc.lineTo(128, brightness * gamma);
+		gc.moveTo(0, 255 - grayTable[0]);
+		for(int index = 1; index < grayTable.length; index++) {
+			gc.lineTo(index, 255- grayTable[index]);
+		}
 		gc.stroke();
+		
+		// Remark: This is some dummy code to give you an idea for graphics drawing with pathes		
+//		gc.beginPath();
+//		gc.moveTo(0, 128);
+//		gc.lineTo(64, brightness);
+//		gc.lineTo(128, brightness * gamma);
+//		gc.stroke();
 	}
 
 	
