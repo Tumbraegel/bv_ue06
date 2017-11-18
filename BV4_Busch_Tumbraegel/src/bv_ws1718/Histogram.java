@@ -27,9 +27,19 @@ public class Histogram {
 	}
 	
 	public void update(RasterImage image, Rectangle selectionRect, ObservableList<StatsProperty> statsData) {
+		//calculate histogram[] out of the gray values found in the images selectionRect
 		
+		int rectY = (int)selectionRect.getY();
+		int rectX = (int)selectionRect.getX();
+		int rectWidth = (int)selectionRect.getWidth();
+		int rectHeight = (int)selectionRect.getHeight();
 		
-		histogram[0] = 0; // remove this line when implementing the proper calculations
+		for(int picY = rectY; picY < rectY+rectHeight; picY++) {
+			for(int picX = rectX; picX < rectX+rectWidth; picX++) {
+				int grayLevel = (image.argb[picY*rectWidth+rectX] >> 16) & 0xff;
+				histogram[grayLevel]++;
+			}
+		}
 		
 		// Remark: Please ignore statsData in Exercise 4. It will be used in Exercise 5.
 		
@@ -40,6 +50,7 @@ public class Histogram {
 		gc.setLineWidth(1);
 
 		// draw histogram[] into the gc graphic context
+		
 		
 		// Remark: This is some dummy code to give you an idea for graphics drawing		
 		double shift = 0.5;
