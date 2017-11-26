@@ -63,7 +63,7 @@ public class Histogram {
 		double shift = 0.5;
 		double ratio = (double)maxHeight/max;
 		
-		for(int index=1; index<grayLevels; index++){
+		for(int index=0; index<grayLevels; index++){
 			double adaptedValue = (double)(histogram[index]+shift)*ratio;
 			gc.strokeLine(index+shift,maxHeight+shift,index+shift,maxHeight-adaptedValue+shift);
 		}
