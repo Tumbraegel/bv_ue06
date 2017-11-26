@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import java.util.Arrays;
 
 public class Histogram {
 
@@ -28,6 +29,8 @@ public class Histogram {
 	
 	public void update(RasterImage image, Rectangle selectionRect, ObservableList<StatsProperty> statsData) {
 		//calculate histogram[] out of the gray values found in the images selectionRect		
+		Arrays.fill(histogram, 0);
+		
 		int rectY = (int)selectionRect.getY();
 		int rectX = (int)selectionRect.getX();
 		int rectWidth = (int)selectionRect.getWidth();
