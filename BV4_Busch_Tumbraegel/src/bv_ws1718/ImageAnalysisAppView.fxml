@@ -26,7 +26,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="800.0" maxWidth="1200.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bv_ws1718.ImageAnalysisAppController">
+<BorderPane maxHeight="800.0" maxWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bv_ws1718.ImageAnalysisAppController">
    <center>
       <HBox alignment="TOP_CENTER" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
@@ -78,28 +78,24 @@
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button mnemonicParsing="false" text="AutoContrast" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label prefHeight="17.0" prefWidth="57.0" text="Contrast:" GridPane.rowIndex="1" />
                         <Label prefHeight="27.0" text="Brightness:" />
-                        <Label prefHeight="27.0" text="Gamma:" GridPane.rowIndex="2" />
-                        <Button minWidth="70.0" mnemonicParsing="false" onAction="#resetToneCurve" prefHeight="27.0" text="Reset" GridPane.rowIndex="3" />
+                        <Label prefHeight="27.0" text="Gamma:" GridPane.rowIndex="1" />
+                        <Button minWidth="70.0" mnemonicParsing="false" onAction="#resetToneCurve" prefHeight="27.0" text="Reset" GridPane.rowIndex="2" />
                         <Slider fx:id="brightnessSlider" blockIncrement="1.0" max="255.0" min="-255.0" onKeyReleased="#brightnessChanged" onMouseClicked="#brightnessChanged" onMouseDragged="#brightnessChanged" prefHeight="27.0" GridPane.columnIndex="1" />
-                        <Slider fx:id="gammaSlider" blockIncrement="0.1" max="3.0" min="0.1" onKeyReleased="#gammaChanged" onMouseClicked="#gammaChanged" onMouseDragged="#gammaChanged" prefHeight="27.0" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Slider fx:id="gammaSlider" blockIncrement="0.1" max="3.0" min="0.1" onKeyReleased="#gammaChanged" onMouseClicked="#gammaChanged" onMouseDragged="#gammaChanged" prefHeight="27.0" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="brightnessLabel" prefHeight="27.0" text="162" GridPane.columnIndex="2" />
-                        <Label fx:id="gammaLabel" prefHeight="27.0" text="1.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <Slider fx:id="contrastSlider" max="10.0" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="gammaLabel" prefHeight="27.0" text="1.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                </children>
             </VBox>
             <VBox spacing="5.0">
                <children>
-                  <TitledPane fx:id="contrastSlider" collapsible="false" text="Histogram">
+                  <TitledPane collapsible="false" text="Histogram">
                      <content>
                         <Canvas fx:id="histogramCanvas" height="200.0" width="256.0" />
                      </content>

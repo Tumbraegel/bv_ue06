@@ -51,7 +51,6 @@ public class ImageAnalysisAppController {
 	final ObservableList<StatsProperty> statsData = FXCollections.observableArrayList(StatsProperty.values());
 	
 	private int brightness;
-	private double contrast;
 	private double gamma;
 	
 	private RasterImage originalImage;
@@ -129,13 +128,6 @@ public class ImageAnalysisAppController {
     void brightnessChanged() {
     	brightness = (int)brightnessSlider.getValue();
     	brightnessLabel.setText("" + brightness);
-    	processImage();
-    }
-    
-    @FXML
-    void contrastChanged() {
-    	contrast = contrastSlider.getValue();
-    	contrastLabel.setText(""+contrast);
     	processImage();
     }
     
