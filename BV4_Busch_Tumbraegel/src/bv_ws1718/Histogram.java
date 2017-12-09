@@ -38,7 +38,7 @@ public class Histogram {
 		
 		for(int picY = rectY; picY < rectY+rectHeight; picY++) {
 			for(int picX = rectX; picX < rectX+rectWidth; picX++) {
-				int grayLevel = (image.argb[picY*rectWidth+picX] >>16) & 0xff;
+				int grayLevel = (image.argb[picY*image.width+picX] >>16) & 0xff;
 				histogram[grayLevel]++;
 			}
 		}
@@ -83,7 +83,8 @@ public class Histogram {
 		int[] allValues = getAllValueArray();
 		
 		//finde den Median
-		median = allValues[(allValues.length/2)];
+		int middle = allValues.length/2;
+		median = allValues[middle];
 		
 		return median;
 	}
@@ -135,8 +136,8 @@ public class Histogram {
 		double shift = 0.5;
 		double ratio = (double)maxHeight/max;
 		
-		for(int index=0; index<grayLevels; index++){
-			double adaptedValue = (double)(histogram[index]+shift)*ratio;
+		for(int index=1; index<grayLevels; index++){
+			double adaptedValue = (double)(histogram[index])*ratio+shift;
 			gc.strokeLine(index+shift,maxHeight+shift,index+shift,maxHeight-adaptedValue+shift);
 		}
 		// Remark: This is some dummy code to give you an idea for graphics drawing		
@@ -164,7 +165,7 @@ public class Histogram {
 		int min = 0;
 		int counter = 0; 
 		boolean foundMin = false;
-		while(!foundMin) {
+		while(!foundMin && counter <256) {
 			if(histogram[counter]!=0) {
 				min = counter;
 				foundMin = true;
@@ -178,7 +179,7 @@ public class Histogram {
 		int max = 255;
 		int counter = 255; 
 		boolean foundMax = false;
-		while(!foundMax) {
+		while(!foundMax && counter >= 0) {
 			if(histogram[counter]!=0) {
 				max = counter;
 				foundMax = true;
