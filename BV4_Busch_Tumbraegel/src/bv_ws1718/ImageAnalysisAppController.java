@@ -158,7 +158,13 @@ public class ImageAnalysisAppController {
     
     @FXML
     void autoContrast() {
-
+    	brightnessSlider.setValue(histogram.getAutoBrightness());
+    	brightnessChanged();
+    	contrastSlider.setValue(histogram.getAutoContrast());
+    	contrastChanged();
+    	gammaSlider.setValue(1);
+    	gammaChanged();
+    	processImage();
     }
         
     @FXML

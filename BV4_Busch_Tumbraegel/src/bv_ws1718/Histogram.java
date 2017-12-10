@@ -22,11 +22,23 @@ public class Histogram {
 
 	private int[] histogram = new int[grayLevels];
 
+	private int autoBrightness;
+
+	private double autoContrast;
+
 	public Histogram(GraphicsContext gc, int maxHeight) {
 		this.gc = gc;
 		this.maxHeight = maxHeight;
 	}
 
+	public int getAutoBrightness() {
+		return autoBrightness;
+	}
+	
+	public double getAutoContrast() {
+		return autoContrast;
+	}
+	
 	public void update(RasterImage image, Rectangle selectionRect, ObservableList<StatsProperty> statsData) {
 		// calculate histogram[] out of the gray values found in the images
 		// selectionRect
@@ -36,7 +48,6 @@ public class Histogram {
 		int rectX = (int) selectionRect.getX();
 		int rectWidth = (int) selectionRect.getWidth();
 		int rectHeight = (int) selectionRect.getHeight();
-
 
 		for (int picY = rectY; picY < rectY + rectHeight; picY++) {
 			for (int picX = rectX; picX < rectX + rectWidth; picX++) {
@@ -55,34 +66,35 @@ public class Histogram {
 
 		StatsProperty mean = statsData.get(2);
 		mean.setValue(getMeanGrey());
-		
-		if(rectWidth != 0 && rectHeight != 0) {
+
+		if (rectWidth != 0 && rectHeight != 0) {
 			StatsProperty median = statsData.get(3);
 			median.setValue(getMedian());
 
 			StatsProperty varianz = statsData.get(4);
 			varianz.setValue(getVarianz());
-			
+
 			StatsProperty entropy = statsData.get(5);
 			entropy.setValue(getEntropy(image));
 		}
+		
+		autoContrast(image);
 	}
 
-	
-	private double getEntropy(RasterImage image){
+	private double getEntropy(RasterImage image) {
 
 		double entropy = 0;
-		int amount = (image.width*image.height);
-		
-		//p is the probability of seeing this particular value
-		for (int i = 0; i < histogram.length; i++){
+		int amount = (image.width * image.height);
+
+		// p is the probability of seeing this particular value
+		for (int i = 0; i < histogram.length; i++) {
 			int count = histogram[i]++;
-			double p = (double)count/amount;
-			
-			if (p > 0){
-				entropy = (entropy - p*Math.log(p)/Math.log(2));
+			double p = (double) count / amount;
+
+			if (p > 0) {
+				entropy = (entropy - p * Math.log(p) / Math.log(2));
 			}
-		}	
+		}
 		return entropy;
 	}
 
@@ -93,12 +105,12 @@ public class Histogram {
 		double temp = 0;
 
 		for (int i : allValues) {
-			temp += Math.pow((double) i,2);
+			temp += Math.pow((double) i, 2);
 		}
 
 		double P = (1.0 / (double) n) * temp;
-		//varianz = P - mü^2
-		double varianz = P - Math.pow(getMeanGrey(),2);
+		// varianz = P - mü^2
+		double varianz = P - Math.pow(getMeanGrey(), 2);
 		return varianz;
 	}
 
@@ -216,5 +228,29 @@ public class Histogram {
 			counter--;
 		}
 		return max;
+	}
+
+	public void autoContrast(RasterImage image) {
+		double hundredPercent = image.argb.length;
+		double onePercentToA = 0;
+		int a = 0;
+		while ((onePercentToA * 100.0 / hundredPercent) < 1.0) {
+				onePercentToA += histogram[a];
+				a++;
+		}
+		
+		double onePercentToB = 0;
+		int b = 255;
+		while ((onePercentToB * 100.0 / hundredPercent) < 1.0) {
+				onePercentToB += histogram[b];
+				b--;
+		}
+		
+		int l = b - a;
+		int middle = (a+b)/2;
+		autoBrightness = 128 - middle;
+		autoContrast = 255.0 /l;
+		
+
 	}
 }
