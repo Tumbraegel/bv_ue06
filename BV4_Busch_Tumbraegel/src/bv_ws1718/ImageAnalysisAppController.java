@@ -270,6 +270,8 @@ public class ImageAnalysisAppController {
 		img.applyToneCurve(toneCurve);
 		img.setToView(imageView);
 		
+		
+		
 		histogram.update(img, selectionRect, statsData);
 		
 		drawSelection();
