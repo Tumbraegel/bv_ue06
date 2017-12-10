@@ -87,18 +87,18 @@ public class Histogram {
 	}
 
 	private double getVarianz() {
-		// TODO Auto-generated method stub
 		int[] allValues = getAllValueArray();
 		int n = allValues.length;
 
 		double temp = 0;
 
-		for (int i = 0; i < allValues.length; i++) {
-			temp += Math.sqrt((double) i);
+		for (int i : allValues) {
+			temp += Math.pow((double) i,2);
 		}
 
 		double P = (1.0 / (double) n) * temp;
-		double varianz = P - Math.sqrt(getMeanGrey());
+		//varianz = P - mü^2
+		double varianz = P - Math.pow(getMeanGrey(),2);
 		return varianz;
 	}
 
@@ -138,7 +138,7 @@ public class Histogram {
 	}
 
 	private double getMeanGrey() {
-		// TODO Auto-generated method stub
+		// mean == mü
 		double mean = 0;
 		double amount = 0;
 

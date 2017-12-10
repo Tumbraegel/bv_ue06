@@ -139,6 +139,13 @@ public class ImageAnalysisAppController {
     }
     
     @FXML
+    void contrastChanged() {
+//    	gamma = gammaSlider.getValue();
+//    	gammaLabel.setText(String.format("%.1f", gamma));
+//    	processImage();
+    }
+    
+    @FXML
     void resetToneCurve() {
     	brightnessSlider.setValue(0);
     	brightnessChanged();
