@@ -234,14 +234,14 @@ public class Histogram {
 		double hundredPercent = image.argb.length;
 		double onePercentToA = 0;
 		int a = 0;
-		while ((onePercentToA * 100.0 / hundredPercent) < 1.0) {
+		while ((onePercentToA * 100.0 / hundredPercent) < 1.0 && a < 256) {
 				onePercentToA += histogram[a];
 				a++;
 		}
 		
 		double onePercentToB = 0;
 		int b = 255;
-		while ((onePercentToB * 100.0 / hundredPercent) < 1.0) {
+		while ((onePercentToB * 100.0 / hundredPercent) < 1.0 && b >= 0) {
 				onePercentToB += histogram[b];
 				b--;
 		}
