@@ -37,6 +37,7 @@ public class Histogram {
 		int rectWidth = (int) selectionRect.getWidth();
 		int rectHeight = (int) selectionRect.getHeight();
 
+
 		for (int picY = rectY; picY < rectY + rectHeight; picY++) {
 			for (int picX = rectX; picX < rectX + rectWidth; picX++) {
 				int grayLevel = (image.argb[picY * image.width + picX] >> 16) & 0xff;
@@ -44,7 +45,8 @@ public class Histogram {
 			}
 
 		}
-
+		System.out.println("width: " + rectWidth);
+		System.out.println("width: " + rectHeight);
 		// Remark: Please ignore statsData in Exercise 4. It will be used in
 		// Exercise 5.
 		StatsProperty min = statsData.get(0);
@@ -56,8 +58,8 @@ public class Histogram {
 		StatsProperty mean = statsData.get(2);
 		mean.setValue(getMeanGrey());
 
-		StatsProperty median = statsData.get(3);
-		median.setValue(getMedian());
+//		StatsProperty median = statsData.get(3);
+//		median.setValue(getMedian());
 
 		StatsProperty varianz = statsData.get(4);
 		varianz.setValue(getVarianz());
@@ -100,18 +102,18 @@ public class Histogram {
 		return varianz;
 	}
 
-	private double getMedian() {
-		// TODO Auto-generated method stub
-		int median = 0;
-
-		int[] allValues = getAllValueArray();
-
-		// finde den Median
-		int middle = allValues.length / 2;
-		median = allValues[middle];
-
-		return median;
-	}
+//	private double getMedian() {
+//		// TODO Auto-generated method stub
+//		int median = 0;
+//
+//		int[] allValues = getAllValueArray();
+//
+//		// finde den Median
+//		int middle = allValues.length / 2;
+//		median = allValues[middle];
+//
+//		return median;
+//	}
 
 	private int[] getAllValueArray() {
 		int numberOfValues = 0;
@@ -180,7 +182,7 @@ public class Histogram {
 
 	private int calculateMax() {
 		int max = histogram[0];
-		for (int i = 1; i < histogram.length; i++) {
+		for (int i = 0; i < histogram.length; i++) {
 			int current = histogram[i];
 			if (current > max) {
 				max = current;
