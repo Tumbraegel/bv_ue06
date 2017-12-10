@@ -80,7 +80,7 @@ public class Histogram {
 			double p = (double)count/amount;
 			
 			if (p > 0){
-				entropy = (entropy - p*Math.log(p));
+				entropy = (entropy - p*Math.log(p)/Math.log(2));
 			}
 		}	
 		return entropy;

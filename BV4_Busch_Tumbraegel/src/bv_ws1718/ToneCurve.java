@@ -34,6 +34,11 @@ public class ToneCurve {
 		this.gamma = gamma;
 		updateTable();
 	}
+	
+	public void setContrast(double contrast) {
+		this.contrast = contrast;
+		updateTable();
+	}
 
 	private void updateTable() {
 		// Fill the grayTable[] array to map gay input values to gray output values.
@@ -46,7 +51,7 @@ public class ToneCurve {
 		// First apply the brightness change, afterwards the gamma correction.
 		for(int grayScale = 0; grayScale < grayTable.length; grayScale++) {
 //			grayTable[grayScale] = grayScale;
-			 int brightnessChangedGray = (int) ((grayScale - 127.5) + 127.5 + brightness);
+			 int brightnessChangedGray = (int) (contrast * ((grayScale  + brightness) - 128) + 128);
 			 int gammaChangedGray = (int) Math.round(((255*(Math.pow(brightnessChangedGray, (1/gamma))))/(Math.pow(255, (1/gamma)))));
 			 
 			 if(gammaChangedGray <= 0) {

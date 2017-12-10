@@ -52,6 +52,7 @@ public class ImageAnalysisAppController {
 	
 	private int brightness;
 	private double gamma;
+	private double contrast;
 	
 	private RasterImage originalImage;
 	private ToneCurve toneCurve;
@@ -140,9 +141,9 @@ public class ImageAnalysisAppController {
     
     @FXML
     void contrastChanged() {
-//    	gamma = gammaSlider.getValue();
-//    	gammaLabel.setText(String.format("%.1f", gamma));
-//    	processImage();
+    	contrast = contrastSlider.getValue();
+    	contrastLabel.setText(String.format("%.1f", contrast));
+    	processImage();
     }
     
     @FXML
@@ -151,6 +152,13 @@ public class ImageAnalysisAppController {
     	brightnessChanged();
     	gammaSlider.setValue(1);
     	gammaChanged();
+    	contrastSlider.setValue(1);
+    	contrastChanged();
+    }
+    
+    @FXML
+    void autoContrast() {
+
     }
         
     @FXML
@@ -213,6 +221,7 @@ public class ImageAnalysisAppController {
 		// initialize parameters
 		brightnessChanged();
 		gammaChanged();
+		contrastChanged();
 		
 		// load and process default image
 		originalImage = new RasterImage(new File(initialFileName));
@@ -272,6 +281,7 @@ public class ImageAnalysisAppController {
         
 		toneCurve.setBrightness(brightness);
 		toneCurve.setGamma(gamma);
+		toneCurve.setContrast(contrast);
        
 		RasterImage img = new RasterImage(originalImage);
 		img.applyToneCurve(toneCurve);

@@ -93,6 +93,7 @@
                         <Slider fx:id="contrastSlider" blockIncrement="0.1" max="10.0" onKeyReleased="#contrastChanged" onMouseClicked="#contrastChanged" onMouseDragged="#contrastChanged" prefHeight="27.0" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label prefHeight="27.0" text="Contrast:" GridPane.rowIndex="2" />
                         <Label fx:id="contrastLabel" prefHeight="27.0" text="1.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Button minWidth="70.0" mnemonicParsing="false" onAction="#autoContrast" prefHeight="27.0" text="Auto Contrast" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
                </children>
