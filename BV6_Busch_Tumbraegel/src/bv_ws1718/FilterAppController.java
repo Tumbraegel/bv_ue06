@@ -19,7 +19,7 @@ import javafx.stage.FileChooser;
 
 public class FilterAppController {
 	
-	private static final String initialFileName = "lena_klein.jpg";
+	private static final String initialFileName = "test1.jpg";
 	private static File fileOpenPath = new File(".");
 	
 	private static final Filter filter = new Filter();
@@ -77,26 +77,27 @@ public class FilterAppController {
 			fileOpenPath = selectedFile.getParentFile();
 			RasterImage img = new RasterImage(selectedFile);
 			img.convertToGray();
-			img.setToView(originalImageView);
+    		img.setToView(originalImageView);
 	    	processImages();
 	    	messageLabel.getScene().getWindow().sizeToScene();;
 		}
     }
     
-    @FXML
-    void convertToGray() {
-    	if(img.isGray) {
-    		img.isGray = false;
-    		img = new RasterImage(new File(initialFileName));
-    		img.setToView(originalImageView);
-    		processImages();
-    	}else {
-    		img.isGray = true;
-    		img.convertToGray();
-    		img.setToView(originalImageView);
-    		processImages();
-    	}
-    }
+//    @FXML
+//    void convertToGray() {
+//    	
+//    	if(img.isGray) {
+//    		img.isGray = false;
+//    		img = new RasterImage(new File(initialFileName));
+//    		img.setToView(originalImageView);
+//    		processImages();
+//    	}else {
+//    		img.isGray = true;
+//    		img.convertToGray();
+//    		img.setToView(originalImageView);
+//    		processImages();
+//    	}
+//    }
 	
     @FXML
     void borderProcessingChanged() {
@@ -149,7 +150,7 @@ public class FilterAppController {
 		
 		// load and process default image
 		img = new RasterImage(new File(initialFileName));
-//		img.convertToGray();
+		img.convertToGray();
 		img.setToView(originalImageView);
 		processImages();
 	}

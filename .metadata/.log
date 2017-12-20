@@ -474,3 +474,9 @@ user global configuration and to define the default location to store repositori
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.equinox.p2.touchpoint.natives 2 0 2017-12-20 10:46:57.771
+!MESSAGE Could not remove temporary backup directory (it is safe to manually delete it and its contents): C:\Users\jb\AppData\Local\Temp\C__Users_jb_java-oxygen_eclipse_2c0e697bf2c0_8d2dcc2ac301
+
+!ENTRY org.eclipse.oomph.setup.ui 1 0 2017-12-20 10:47:11.027
+!MESSAGE Setup tasks were performed during startup. See 'C:\Users\jb\java-oxygen\eclipse\configuration\org.eclipse.oomph.setup\setup.log' for details

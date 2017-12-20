@@ -23,7 +23,7 @@ public class RasterImage {
 	public int[] argb;	// pixels represented as ARGB values in scanline order
 	public int width;	// image width in pixels
 	public int height;	// image height in pixels
-	public boolean isGray = false;
+//	public boolean isGray = false;
 	
 	public RasterImage(int width, int height) {
 		// creates an empty RasterImage of given size
