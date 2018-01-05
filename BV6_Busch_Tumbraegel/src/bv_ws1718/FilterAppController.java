@@ -8,8 +8,8 @@ package bv_ws1718;
 
 import java.io.File;
 
-import bv_ws1718.Filter.BorderProcessing;
-import bv_ws1718.Filter.FilterType;
+//import bv_ws1718.Filter.BorderProcessing;
+import bv_ws1718.Filter.PredicationType;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -50,10 +50,10 @@ public class FilterAppController {
     private Label kernelTitleLabel;
 
     @FXML
-    private ComboBox<FilterType> filterSelection;
+    private ComboBox<PredicationType> filterSelection;
 
-    @FXML
-    private ComboBox<BorderProcessing> borderProcessingSelection;
+//    @FXML
+//    private ComboBox<BorderProcessing> borderProcessingSelection;
 
     @FXML
     private ImageView originalImageView;
@@ -106,7 +106,7 @@ public class FilterAppController {
 
     @FXML
     void filterChanged() {
-    	boolean noKernel = filterSelection.getValue() == FilterType.COPY;
+    	boolean noKernel = filterSelection.getValue() == PredicationType.COPY;
     	kernelSizeSlider.setDisable(noKernel);
     	kernelSizeLabel.setDisable(noKernel);
     	kernelTitleLabel.setDisable(noKernel);
@@ -137,10 +137,10 @@ public class FilterAppController {
 	@FXML
 	public void initialize() {
 		// set combo boxes items
-		filterSelection.getItems().addAll(FilterType.values());
-		filterSelection.setValue(FilterType.COPY);
-		borderProcessingSelection.getItems().addAll(BorderProcessing.values());
-		borderProcessingSelection.setValue(BorderProcessing.CONTINUE);
+		filterSelection.getItems().addAll(PredicationType.values());
+		filterSelection.setValue(PredicationType.COPY);
+//		borderProcessingSelection.getItems().addAll(BorderProcessing.values());
+//		borderProcessingSelection.setValue(BorderProcessing.CONTINUE);
 		
 		// initialize parameters
 		noiseQuantityChanged();
@@ -172,12 +172,20 @@ public class FilterAppController {
 		switch(filterSelection.getValue()) {
 		case COPY:
 			filter.copy(noisyImg, filteredImg);
+		case A:
+//			filter.copy(noisyImg, filteredImg);
 			break;
-		case BOX:
-			filter.box(noisyImg, filteredImg, kernelSize, borderProcessingSelection.getValue());
+		case B:
+//			filter.box(noisyImg, filteredImg, kernelSize, borderProcessingSelection.getValue());
 			break;
-		case MEDIAN:
-			filter.median(noisyImg, filteredImg, kernelSize, borderProcessingSelection.getValue());
+		case C:
+//			filter.median(noisyImg, filteredImg, kernelSize, borderProcessingSelection.getValue());
+			break;
+		case AANDBMINUSC:
+			break;
+		case AANDBDIVIDEDBY2:
+			break;
+		case ADAPTIV:
 			break;
 		default:
 			break;
