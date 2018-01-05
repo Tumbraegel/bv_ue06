@@ -87,48 +87,4 @@ public class RasterImage {
 			argb[i] = 0xff000000 | (gray << 16) | (gray << 8) | (gray); 
 		}
 	}
-	
-	/**
-	 * @param quantity The fraction of pixels that need to be modified
-	 * @param strength The brightness to be added or subtracted from a pixel's gray level
-	 */
-	public void addNoise(double quantity, int strength) {
-		// TODO: add noise with the given quantity and strength
-		int amountOfPixels = argb.length;
-		int amountOfNoisePixels = (int) (quantity * amountOfPixels);
-		Random randomizer = new Random();
-		
-		for(int i = 0; i < amountOfNoisePixels; i++) {		
-
-			int randomPixel = randomizer.nextInt(amountOfPixels);
-			int r = (argb[randomPixel] >> 16) & 0xff;
-			int g = (argb[randomPixel] >> 8) & 0xff;
-			int b = (argb[randomPixel]) & 0xff;
-			
-			if(randomizer.nextBoolean()){
-				r += strength;
-				g += strength;
-				b += strength;
-				if(r>255) {
-					r=g=b=255;
-				}
-				argb[randomPixel] = 0xff000000 | (r << 16) | (g << 8) | (b); 
-			}else {
-				r -= strength;
-				g -= strength;
-				b -= strength;
-				if(r<0){
-					r=g=b=0;
-				}
-				argb[randomPixel] = 0xff000000 | (r << 16) | (g << 8) | (b); 
-			}
-			
-			
-		}
-		
-		
-		
-	}
-	
-
 }

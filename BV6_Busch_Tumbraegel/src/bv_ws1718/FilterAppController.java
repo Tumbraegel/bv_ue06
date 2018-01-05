@@ -27,30 +27,9 @@ public class FilterAppController {
 	private int noiseStrength;
 	private int kernelSize;
 	private RasterImage img;
-	
-    @FXML
-    private Slider noiseQuantitySlider;
 
     @FXML
-    private Label noiseQuantityLabel;
-
-    @FXML
-    private Slider noiseStrengthSlider;
-
-    @FXML
-    private Label noiseStrengthLabel;
-
-    @FXML
-    private Slider kernelSizeSlider;
-
-    @FXML
-    private Label kernelSizeLabel;
-
-    @FXML
-    private Label kernelTitleLabel;
-
-    @FXML
-    private ComboBox<PredicationType> filterSelection;
+    private ComboBox<PredicationType> predicationSelection;
 
 //    @FXML
 //    private ComboBox<BorderProcessing> borderProcessingSelection;
@@ -59,7 +38,7 @@ public class FilterAppController {
     private ImageView originalImageView;
 
     @FXML
-    private ImageView noisyImageView;
+    private ImageView predicationImageView;
 
     @FXML
     private ImageView filteredImageView;
@@ -82,71 +61,21 @@ public class FilterAppController {
 	    	messageLabel.getScene().getWindow().sizeToScene();;
 		}
     }
-    
-//    @FXML
-//    void convertToGray() {
-//    	
-//    	if(img.isGray) {
-//    		img.isGray = false;
-//    		img = new RasterImage(new File(initialFileName));
-//    		img.setToView(originalImageView);
-//    		processImages();
-//    	}else {
-//    		img.isGray = true;
-//    		img.convertToGray();
-//    		img.setToView(originalImageView);
-//    		processImages();
-//    	}
-//    }
-	
+
     @FXML
-    void borderProcessingChanged() {
+    void predicationChanged() {
     	processImages();
     }
 
-    @FXML
-    void filterChanged() {
-    	boolean noKernel = filterSelection.getValue() == PredicationType.COPY;
-    	kernelSizeSlider.setDisable(noKernel);
-    	kernelSizeLabel.setDisable(noKernel);
-    	kernelTitleLabel.setDisable(noKernel);
-    	processImages();
-    }
-
-    @FXML
-    void noiseQuantityChanged() {
-    	noiseQuantity = noiseQuantitySlider.getValue();
-    	noiseQuantityLabel.setText(String.format("%.0f %%", noiseQuantity * 100));
-    	processImages();
-    }
-    
-    @FXML
-    void noiseStrengthChanged() {
-    	noiseStrength = (int)noiseStrengthSlider.getValue();
-    	noiseStrengthLabel.setText("" + noiseStrength);
-    	processImages();
-    }
-    
-    @FXML
-    void kernelSizeChanged() {
-    	kernelSize = (int)kernelSizeSlider.getValue() | 1; // ensure odd integer value
-    	kernelSizeLabel.setText(kernelSize + " x " + kernelSize);
-    	processImages();
-    }
     
 	@FXML
 	public void initialize() {
 		// set combo boxes items
-		filterSelection.getItems().addAll(PredicationType.values());
-		filterSelection.setValue(PredicationType.COPY);
-//		borderProcessingSelection.getItems().addAll(BorderProcessing.values());
-//		borderProcessingSelection.setValue(BorderProcessing.CONTINUE);
+		predicationSelection.getItems().addAll(PredicationType.values());
+		predicationSelection.setValue(PredicationType.COPY);
 		
 		// initialize parameters
-		noiseQuantityChanged();
-		noiseStrengthChanged();
-		kernelSizeChanged();
-		filterChanged();
+		predicationChanged();
 		
 		// load and process default image
 		img = new RasterImage(new File(initialFileName));
@@ -162,18 +91,17 @@ public class FilterAppController {
 		long startTime = System.currentTimeMillis();
 		
 		RasterImage origImg = new RasterImage(originalImageView); 
-		RasterImage noisyImg = new RasterImage(origImg.width, origImg.height); 
+		RasterImage predicationImg = new RasterImage(origImg.width, origImg.height); 
 		RasterImage filteredImg = new RasterImage(origImg.width, origImg.height); 
 		
-		filter.copy(origImg, noisyImg);
-		noisyImg.addNoise(noiseQuantity, noiseStrength);
+		filter.copy(origImg, filteredImg);		
 		
-		
-		switch(filterSelection.getValue()) {
+		switch(predicationSelection.getValue()) {
 		case COPY:
-			filter.copy(noisyImg, filteredImg);
+			filter.copy(origImg, predicationImg);
+			break;
 		case A:
-//			filter.copy(noisyImg, filteredImg);
+			filter.methodA(origImg, predicationImg);
 			break;
 		case B:
 //			filter.box(noisyImg, filteredImg, kernelSize, borderProcessingSelection.getValue());
@@ -191,7 +119,7 @@ public class FilterAppController {
 			break;
 		}
 		
-		noisyImg.setToView(noisyImageView);
+		predicationImg.setToView(predicationImageView);
 		filteredImg.setToView(filteredImageView);
 		
 	   	messageLabel.setText("Processing time: " + (System.currentTimeMillis() - startTime) + " ms");
