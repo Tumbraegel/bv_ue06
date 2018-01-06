@@ -9,7 +9,7 @@ package bv_ws1718;
 import java.io.File;
 
 //import bv_ws1718.Filter.BorderProcessing;
-import bv_ws1718.Filter.PredicationType;
+import bv_ws1718.Filter.PredictionType;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -29,7 +29,7 @@ public class FilterAppController {
 	private RasterImage img;
 
     @FXML
-    private ComboBox<PredicationType> predicationSelection;
+    private ComboBox<PredictionType> predicationSelection;
 
 //    @FXML
 //    private ComboBox<BorderProcessing> borderProcessingSelection;
@@ -71,8 +71,8 @@ public class FilterAppController {
 	@FXML
 	public void initialize() {
 		// set combo boxes items
-		predicationSelection.getItems().addAll(PredicationType.values());
-		predicationSelection.setValue(PredicationType.COPY);
+		predicationSelection.getItems().addAll(PredictionType.values());
+		predicationSelection.setValue(PredictionType.COPY);
 		
 		// initialize parameters
 		predicationChanged();
@@ -104,16 +104,19 @@ public class FilterAppController {
 			filter.methodA(origImg, predicationImg);
 			break;
 		case B:
-//			filter.box(noisyImg, filteredImg, kernelSize, borderProcessingSelection.getValue());
+			filter.methodB(origImg, predicationImg);
 			break;
 		case C:
-//			filter.median(noisyImg, filteredImg, kernelSize, borderProcessingSelection.getValue());
+			filter.methodC(origImg, predicationImg);
 			break;
 		case AANDBMINUSC:
+			filter.methodAAndBMinusC(origImg, predicationImg);
 			break;
 		case AANDBDIVIDEDBY2:
+			filter.methodAAndBDividedBy2(origImg, predicationImg);
 			break;
 		case ADAPTIV:
+			filter.methodAdaptive(origImg, predicationImg);
 			break;
 		default:
 			break;
