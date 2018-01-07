@@ -1,4 +1,4 @@
-// BV Ue1 WS2017/18 Vorgabe
+// BV Ue6 WS2017/18 Vorgabe
 //
 // Copyright (C) 2017 by Klaus Jung
 // All rights reserved.
