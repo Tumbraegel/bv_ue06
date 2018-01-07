@@ -134,13 +134,7 @@ public class Filter {
 		for(int y = 0; y < src.height; y++){
 			for (int x = 0; x < src.width; x++) {
 				// check margins
-				if (x < 1 && y < 1){
-					pixelA = 128;
-					pixelB = 128;
-				} else if(x < 1 && y >= 1){
-					pixelA = 128;
-					pixelB = 128;
-				}else if(y < 1 && x >= 1){
+				if ((x < 1 && (y < 1 || y >= 1)) || y < 1 && x >= 1){
 					pixelA = 128;
 					pixelB = 128;
 				} else { 
@@ -164,15 +158,7 @@ public class Filter {
 			for (int x = 0; x < src.width; x++) {
 				pixelX = src.argb[y * src.width + x] & 0xFF;
 				// check margins
-				if (x < 1 && y < 1){
-					pixelA = 128;
-					pixelB = 128;
-					pixelC = 128;
-				} else if(x < 1 && y >= 1){
-					pixelA = 128;
-					pixelB = 128;
-					pixelC = 128;
-				}else if(y < 1 && x >= 1){
+				if ((x < 1 && (y < 1 || y >= 1)) || y < 1 && x >= 1){
 					pixelA = 128;
 					pixelB = 128;
 					pixelC = 128;
