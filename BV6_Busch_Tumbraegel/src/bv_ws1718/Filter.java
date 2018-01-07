@@ -113,7 +113,7 @@ public class Filter {
 		for (int y = 0; y < src.height; y++) {
 			for (int x = 0; x < src.width; x++) {
 				// check margins
-				if ((x < 1 && (y < 1 || y >= 1))||y<1&&x>=1)
+				if ((x < 1 && (y < 1 || y >= 1)) || y < 1 && x >= 1)
 					pixelC = 128;
 				else
 					pixelC = src.argb[(y - 1) * src.width + (x - 1)] & 0xFF;
@@ -124,7 +124,7 @@ public class Filter {
 				dst.argb[y * dst.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
-//			getPredictionEntropy(dst);
+			// getPredictionEntropy(dst);
 		}
 	}
 
@@ -137,10 +137,10 @@ public class Filter {
 				if (y == 0 || x == 0) {
 					predecessorPixel = 128;
 				} else {
-					predecessorPixel = dst.argb[(y - 1) * dst.width + (x -1)] & 0xFF;
+					predecessorPixel = dst.argb[(y - 1) * dst.width + (x - 1)] & 0xFF;
 				}
 				predictionError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
-				prediction = predecessorPixel-predictionError;
+				prediction = predecessorPixel - predictionError;
 				prediction = noOverflow(prediction);
 				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
 
@@ -180,12 +180,37 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
-			getPredictionEntropy(dst);
+			// getPredictionEntropy(dst);
 		}
 	}
 
 	public void reconstructAAndBMinusC(RasterImage src, RasterImage dst) {
-		// TODO Auto-generated method stub
+		int pixelA, pixelB, pixelC, prediction;
+		int predictionError;
+		for (int y = 0; y < src.height; y++) {
+			for (int x = 0; x < src.width; x++) {
+				if (y == 0 && x == 0) {
+					pixelC = pixelA = pixelB = 128;
+				} else if (x == 0) {
+					pixelA = 128;
+					pixelB = dst.argb[(y - 1) * dst.width + (x)] & 0xFF;
+					pixelC = 128;
+				} else if (y == 0) {
+					pixelB = 128;
+					pixelA = dst.argb[(y) * dst.width + (x - 1)] & 0xFF;
+					pixelC = 128;
+				} else {
+					pixelA = dst.argb[(y) * dst.width + (x - 1)] & 0xFF;
+					pixelB = dst.argb[(y - 1) * dst.width + (x)] & 0xFF;
+					pixelC = dst.argb[(y - 1) * dst.width + (x - 1)] & 0xFF;
+				}
+				predictionError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
+				prediction = predictionError + (pixelA + pixelB - pixelC);
+				prediction = noOverflow(prediction);
+				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
+
+			}
+		}
 
 	}
 
@@ -345,5 +370,17 @@ public class Filter {
 		for (int i = 0; i < dst.argb.length; i++) {
 			dst.argb[i] = src.argb[i];
 		}
+	}
+
+	public int getMSE(RasterImage origImg, RasterImage filteredImg) {
+		int mse = 0;
+		for (int y = 0; y < origImg.height; y++) {
+			for (int x = 0; x < origImg.width; x++) {
+				int origPixel = origImg.argb[y*origImg.width+x]& 0xff;
+				int filterdPixel = filteredImg.argb[y*origImg.width+x]& 0xff;
+				mse += (origPixel-filterdPixel);
+			}
+		}
+		return mse/origImg.argb.length;
 	}
 }
