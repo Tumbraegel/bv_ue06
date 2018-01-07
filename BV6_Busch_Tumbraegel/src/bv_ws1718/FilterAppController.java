@@ -28,33 +28,11 @@ public class FilterAppController {
 	private static File fileOpenPath = new File(".");
 	
 	private static final Filter filter = new Filter();
-	private RasterImage img;
-	
-	public enum StatsProperty {
-		origEntropy, predicEntropy, reconEntropy, MSE ;
-		
-	    private final SimpleStringProperty name;
-	    private final SimpleStringProperty value;
-	    
-	    private StatsProperty() {
-	        this.name = new SimpleStringProperty(name());
-	        this.value = new SimpleStringProperty("n/a");
-	    }
-	    
-	    public String getName() { return name.get(); }
-	    public String getValue() { return value.get(); }
-	    public void setValue(double value) { this.value.set(String.format("%.2f", value)); }
-	    public void setValue(int value) { this.value.set(String.format("%d", value)); }
-	}
-	
-	final ObservableList<StatsProperty> statsData = FXCollections.observableArrayList(StatsProperty.values());
-	
+	private RasterImage img;	
 
     @FXML
     private ComboBox<PredictionType> predictionSelection;
 
-//    @FXML
-//    private ComboBox<BorderProcessing> borderProcessingSelection;
 
     @FXML
     private ImageView originalImageView;
@@ -69,13 +47,16 @@ public class FilterAppController {
     private Label messageLabel;
     
     @FXML
-    private TableView<StatsProperty> statsTableView;
+    private Label mseLabel;
     
     @FXML
-    private TableColumn<StatsProperty, String> statsNamesColumn;
-
+    private Label origEntropyLabel;
+    
     @FXML
-    private TableColumn<StatsProperty, String> statsValuesColumn;
+    private Label predictionEntropyLabel;
+    
+    @FXML
+    private Label filteredEntropyLabel;
 
     @FXML
     void openImage() {
@@ -89,7 +70,11 @@ public class FilterAppController {
 			img.convertToGray();
     		img.setToView(originalImageView);
 	    	processImages();
-	    	messageLabel.getScene().getWindow().sizeToScene();;
+	    	messageLabel.getScene().getWindow().sizeToScene();
+	    	mseLabel.getScene().getWindow().sizeToScene();
+	    	origEntropyLabel.getScene().getWindow().sizeToScene();
+	    	predictionEntropyLabel.getScene().getWindow().sizeToScene();
+	    	filteredEntropyLabel.getScene().getWindow().sizeToScene();
 		}
     }
 
@@ -100,13 +85,7 @@ public class FilterAppController {
 
     
 	@FXML
-	public void initialize() {
-		// initialize table view
-		statsNamesColumn.setCellValueFactory(new PropertyValueFactory<StatsProperty, String>("name"));
-		statsValuesColumn.setCellValueFactory(new PropertyValueFactory<StatsProperty, String>("value"));
-		statsTableView.setItems(statsData);
-		statsTableView.setSelectionModel(null);
-				
+	public void initialize() {				
 				
 		// set combo boxes items
 		predictionSelection.getItems().addAll(PredictionType.values());
@@ -129,48 +108,37 @@ public class FilterAppController {
 		long startTime = System.currentTimeMillis();
 		
 		RasterImage origImg = new RasterImage(originalImageView); 
-		filter.getEntropy(origImg);
 		RasterImage predictionImg = new RasterImage(origImg.width, origImg.height); 
 		RasterImage filteredImg = new RasterImage(origImg.width, origImg.height); 
-		filter.getEntropy(filteredImg);
-		
-		filter.copy(origImg, filteredImg);		
-		
+				
 		switch(predictionSelection.getValue()) {
 		case COPY:
 			filter.copy(origImg, predictionImg);
 			filter.copy(predictionImg, filteredImg);
-			filter.getEntropy(origImg);
 			break;
 		case A:
 			filter.methodA(origImg, predictionImg);
 			filter.reconstructA(predictionImg, filteredImg);
-			filter.getEntropy(predictionImg);
 			break;
 		case B:
 			filter.methodB(origImg, predictionImg);
 			filter.reconstructB(predictionImg, filteredImg);
-			filter.getEntropy(predictionImg);
 			break;
 		case C:
 			filter.methodC(origImg, predictionImg);
 			filter.reconstructC(predictionImg, filteredImg);
-			filter.getEntropy(predictionImg);
 			break;
 		case AANDBMINUSC:
 			filter.methodAAndBMinusC(origImg, predictionImg);
 			filter.reconstructAAndBMinusC(predictionImg, filteredImg);
-			filter.getEntropy(predictionImg);
 			break;
 		case AANDBDIVIDEDBY2:
 			filter.methodAAndBDividedBy2(origImg, predictionImg);
 			filter.reconstructAAndBDividedBy2(predictionImg, filteredImg);
-			filter.getEntropy(predictionImg);
 			break;
 		case ADAPTIVE:
 			filter.methodAdaptive(origImg, predictionImg);
 			filter.reconstructAdaptive(predictionImg, filteredImg);
-			filter.getEntropy(predictionImg);
 			break;
 		default:
 			break;
@@ -178,16 +146,12 @@ public class FilterAppController {
 		
 		predictionImg.setToView(predictionImageView);
 		filteredImg.setToView(filteredImageView);
-		
-		statsTableView.refresh();
-		
+				
 	   	messageLabel.setText("Processing time: " + (System.currentTimeMillis() - startTime) + " ms");
-//	   	messageLabel.setText("MSE: " + filter.getMSE(origImg, filteredImg));
+	   	origEntropyLabel.setText("Entropy: " + filter.getEntropy(origImg));
+	   	predictionEntropyLabel.setText("Entropy: " + filter.getEntropy(predictionImg));
+	   	filteredEntropyLabel.setText("Entropy: " + filter.getEntropy(filteredImg));
+	   	mseLabel.setText("MSE: " + filter.getMSE(origImg, filteredImg));
 	}
-	
-
-	
-
-
 
 }
