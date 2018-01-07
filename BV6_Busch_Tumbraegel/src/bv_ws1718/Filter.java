@@ -45,10 +45,6 @@ public class Filter {
 						| (predictionError);
 				pixelA = pixelX;
 			}
-<<<<<<< HEAD
-=======
-			// getPredictionEntropy(dst);
->>>>>>> 6db0afe115efd7f2fe63929f231dc050ca220254
 		}
 	}
 
@@ -64,10 +60,6 @@ public class Filter {
 				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
 				predecessorPixel = prediction;
 			}
-<<<<<<< HEAD
-=======
-			// getReconstructedEntropy(dst);
->>>>>>> 6db0afe115efd7f2fe63929f231dc050ca220254
 		}
 	}
 
@@ -88,10 +80,6 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
-<<<<<<< HEAD
-=======
-			// getPredictionEntropy(dst);
->>>>>>> 6db0afe115efd7f2fe63929f231dc050ca220254
 		}
 	}
 
@@ -112,10 +100,6 @@ public class Filter {
 				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
 
 			}
-<<<<<<< HEAD
-=======
-			// getReconstructedEntropy(dst);
->>>>>>> 6db0afe115efd7f2fe63929f231dc050ca220254
 		}
 
 	}
@@ -138,14 +122,6 @@ public class Filter {
 				dst.argb[y * dst.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-//			getPredictionEntropy(dst);
->>>>>>> 6db0afe115efd7f2fe63929f231dc050ca220254
-=======
-			// getPredictionEntropy(dst);
->>>>>>> 5ab2cc594814868603d032f063183f874be45e0a
 		}
 	}
 
@@ -201,10 +177,6 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
-<<<<<<< HEAD
-=======
-			// getPredictionEntropy(dst);
->>>>>>> 5ab2cc594814868603d032f063183f874be45e0a
 		}
 	}
 
@@ -319,10 +291,6 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
-<<<<<<< HEAD
-=======
-//			getPredictionEntropy(dst);
->>>>>>> 5ab2cc594814868603d032f063183f874be45e0a
 		}
 
 	}

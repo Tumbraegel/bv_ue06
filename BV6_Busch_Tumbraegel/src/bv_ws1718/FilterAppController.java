@@ -16,7 +16,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -29,9 +28,6 @@ public class FilterAppController {
 	private static File fileOpenPath = new File(".");
 	
 	private static final Filter filter = new Filter();
-	private double noiseQuantity;
-	private int noiseStrength;
-	private int kernelSize;
 	private RasterImage img;
 	
 	public enum StatsProperty {
@@ -183,14 +179,10 @@ public class FilterAppController {
 		predictionImg.setToView(predictionImageView);
 		filteredImg.setToView(filteredImageView);
 		
-<<<<<<< HEAD
 		statsTableView.refresh();
 		
 	   	messageLabel.setText("Processing time: " + (System.currentTimeMillis() - startTime) + " ms");
-=======
 //	   	messageLabel.setText("MSE: " + filter.getMSE(origImg, filteredImg));
-	   	messageLabel.setText("Processing time: " + (System.currentTimeMillis()-startTime)+" ms");
->>>>>>> 5ab2cc594814868603d032f063183f874be45e0a
 	}
 	
 
