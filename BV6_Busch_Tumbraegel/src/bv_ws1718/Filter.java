@@ -46,6 +46,21 @@ public class Filter {
 		}
 	}
 
+	public void reconstructA(RasterImage src, RasterImage dst) {
+		int predecessorPixel;
+		int predicationError, predication;
+		for (int y = 0; y < src.height; y++) {
+			predecessorPixel = 128;
+			for (int x = 0; x < src.width; x++) {
+				predicationError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
+				predication = predicationError + predecessorPixel;
+				predication = noOverflow(predication);
+				dst.argb[y * dst.width + x] = 0xff000000 | (predication << 16) | (predication << 8) | (predication);
+				predecessorPixel = predication;
+			}
+		}
+	}
+
 	public void methodB(RasterImage src, RasterImage dst) {
 		// P = B
 		int pixelB, pixelX;
@@ -66,6 +81,25 @@ public class Filter {
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	public void reconstructB(RasterImage src, RasterImage dst) {
+		int predecessorPixel;
+		int predicationError, predication;
+		for (int y = 0; y < src.height; y++) {
+			predecessorPixel = 128;
+			for (int x = 0; x < src.width; x++) {
+				predicationError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
+				predication = predicationError + predecessorPixel;
+				predication = noOverflow(predication);
+				dst.argb[y * dst.width + x] = 0xff000000 | (predication << 16) | (predication << 8) | (predication);
+				predecessorPixel = predication;
+			}
+		}
+
+	}
+
+>>>>>>> 5a2f222f1c4b2acaa11dbdf5c4429486e38febb2
 	public void methodC(RasterImage src, RasterImage dst) {
 		// P = C
 		int pixelC, pixelX;
@@ -91,6 +125,7 @@ public class Filter {
 		}
 	}
 
+<<<<<<< HEAD
 	private int noOverflow(int predictionError) {
 		if (predictionError <= 0) {
 			predictionError = 0;
@@ -98,6 +133,11 @@ public class Filter {
 			predictionError = 255;
 		}
 		return predictionError;
+=======
+	public void reconstructC(RasterImage src, RasterImage dst) {
+		// TODO Auto-generated method stub
+
+>>>>>>> 5a2f222f1c4b2acaa11dbdf5c4429486e38febb2
 	}
 
 	public void methodAAndBMinusC(RasterImage src, RasterImage dst) {
@@ -132,6 +172,14 @@ public class Filter {
 						| (predictionError);
 			}
 		}
+<<<<<<< HEAD
+=======
+	}
+
+	public void reconstructAAndBMinusC(RasterImage src, RasterImage dst) {
+		// TODO Auto-generated method stub
+
+>>>>>>> 5a2f222f1c4b2acaa11dbdf5c4429486e38febb2
 	}
 
 	public void methodAAndBDividedBy2(RasterImage src, RasterImage dst) {
@@ -158,6 +206,14 @@ public class Filter {
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	public void reconstructAAndBDividedBy2(RasterImage src, RasterImage dst) {
+		// TODO Auto-generated method stub
+
+	}
+
+>>>>>>> 5a2f222f1c4b2acaa11dbdf5c4429486e38febb2
 	public void methodAdaptive(RasterImage src, RasterImage dst) {
 		// if |A-C| < |B-C|, then P = B, otherwise P = A
 		int pixelA, pixelB, pixelC, pixelX;
@@ -188,11 +244,15 @@ public class Filter {
 
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
+<<<<<<< HEAD
 				calculateEntropy(dst);
+=======
+>>>>>>> 5a2f222f1c4b2acaa11dbdf5c4429486e38febb2
 			}
 		}
 
 	}
+<<<<<<< HEAD
 	
 	static double calculateEntropy(RasterImage image) {
 
@@ -209,6 +269,12 @@ public class Filter {
 			}
 		}
 		return entropy;
+=======
+
+	public void reconstructAdaptive(RasterImage src, RasterImage dst) {
+		// TODO Auto-generated method stub
+
+>>>>>>> 5a2f222f1c4b2acaa11dbdf5c4429486e38febb2
 	}
 
 	public void copy(RasterImage src, RasterImage dst) {
@@ -218,4 +284,14 @@ public class Filter {
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	private int noOverflow(int value) {
+		if (value <= 0)
+			value = 0;
+		else if (value >= 255)
+			value = 255;
+		return value;
+	}
+>>>>>>> 5a2f222f1c4b2acaa11dbdf5c4429486e38febb2
 }
