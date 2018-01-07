@@ -188,21 +188,5 @@ public class Filter {
 			dst.argb[i] = src.argb[i];
 		}
 	}
-	
-	private double getEntropy(RasterImage dst) {
-		// TODO: calculate entropy for every method
-		double entropy = 0;
-		int amount = (dst.width * dst.height);
 
-		// p is the probability of seeing this particular value
-		for (int i = 0; i < dst.argb.length; i++) {
-			int count = dst.argb.length[i]++;
-			double p = (double) count / amount;
-
-			if (p > 0) {
-				entropy = (entropy - p * Math.log(p) / Math.log(2));
-			}
-		}
-		return entropy;
-	}
 }
