@@ -132,7 +132,8 @@ public class FilterAppController {
 		predictionImg.setToView(predictionImageView);
 		filteredImg.setToView(filteredImageView);
 		
-	   	messageLabel.setText("MSE: " + filter.getMSE(origImg, filteredImg));
+//	   	messageLabel.setText("MSE: " + filter.getMSE(origImg, filteredImg));
+	   	messageLabel.setText("Processing time: " + (System.currentTimeMillis()-startTime)+" ms");
 	}
 	
 

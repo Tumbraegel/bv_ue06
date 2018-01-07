@@ -240,7 +240,28 @@ public class Filter {
 	}
 
 	public void reconstructAAndBDividedBy2(RasterImage src, RasterImage dst) {
-		// TODO Auto-generated method stub
+		int pixelA, pixelB, prediction;
+		int predictionError;
+		for (int y = 0; y < src.height; y++) {
+			for (int x = 0; x < src.width; x++) {
+				if (y == 0 && x == 0) {
+					pixelA = pixelB = 128;
+				} else if (x == 0) {
+					pixelA = 128;
+					pixelB = dst.argb[(y - 1) * dst.width + (x)] & 0xFF;
+				} else if (y == 0) {
+					pixelB = 128;
+					pixelA = dst.argb[(y) * dst.width + (x - 1)] & 0xFF;
+				} else {
+					pixelA = dst.argb[(y) * dst.width + (x - 1)] & 0xFF;
+					pixelB = dst.argb[(y - 1) * dst.width + (x)] & 0xFF;
+				}
+				predictionError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
+				prediction = predictionError + (pixelA + pixelB)/2;
+				prediction = noOverflow(prediction);
+				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
+			}
+		}
 
 	}
 
@@ -275,13 +296,47 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
-			getPredictionEntropy(dst);
+//			getPredictionEntropy(dst);
 		}
 
 	}
 
 	public void reconstructAdaptive(RasterImage src, RasterImage dst) {
-		// TODO Auto-generated method stub
+		int pixelA, pixelB, pixelC, prediction;
+		int predictionError;
+		for (int y = 0; y < src.height; y++) {
+			for (int x = 0; x < src.width; x++) {
+				if (y == 0 && x == 0) {
+					pixelC = pixelA = pixelB = 128;
+				} else if (x == 0) {
+					pixelA = 128;
+					pixelB = dst.argb[(y - 1) * dst.width + (x)] & 0xFF;
+					pixelC = 128;
+				} else if (y == 0) {
+					pixelB = 128;
+					pixelA = dst.argb[(y) * dst.width + (x - 1)] & 0xFF;
+					pixelC = 128;
+				} else {
+					pixelA = dst.argb[(y) * dst.width + (x - 1)] & 0xFF;
+					pixelB = dst.argb[(y - 1) * dst.width + (x)] & 0xFF;
+					pixelC = dst.argb[(y - 1) * dst.width + (x - 1)] & 0xFF;
+				}
+				
+				predictionError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
+				
+				int firstCase = Math.abs(pixelA - pixelC);
+				int secondCase = Math.abs(pixelB - pixelC);
+				
+				if (firstCase < secondCase)
+					prediction = pixelB - predictionError;
+				else
+					prediction = pixelA -predictionError;
+
+				prediction = noOverflow(prediction);
+				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
+
+			}
+		}
 
 	}
 
@@ -372,8 +427,8 @@ public class Filter {
 		}
 	}
 
-	public int getMSE(RasterImage origImg, RasterImage filteredImg) {
-		int mse = 0;
+	public float getMSE(RasterImage origImg, RasterImage filteredImg) {
+		float mse = 0.0f;
 		for (int y = 0; y < origImg.height; y++) {
 			for (int x = 0; x < origImg.width; x++) {
 				int origPixel = origImg.argb[y*origImg.width+x]& 0xff;
