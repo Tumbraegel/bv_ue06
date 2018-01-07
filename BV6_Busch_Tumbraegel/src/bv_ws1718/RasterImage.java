@@ -1,4 +1,4 @@
-// BV Ue1 WS2017/18 Vorgabe
+// BV Ue6 WS2017/18 Vorgabe
 //
 // Copyright (C) 2017 by Klaus Jung
 // All rights reserved.
@@ -8,7 +8,6 @@ package bv_ws1718;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Random;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
