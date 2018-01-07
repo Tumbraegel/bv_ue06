@@ -234,7 +234,6 @@ public class Filter {
 
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
-				calculateEntropy(dst);
 			}
 		}
 
@@ -245,7 +244,7 @@ public class Filter {
 
 	}
 
-	static double calculateEntropy(RasterImage image) {
+	public double getOriginalEntropy(RasterImage image) {
 
 		double entropy = 0;
 		int amount = (image.width * image.height);
@@ -259,6 +258,18 @@ public class Filter {
 				entropy = (entropy - p * Math.log(p) / Math.log(2));
 			}
 		}
+		return entropy;
+	}
+	
+	public double getPredictionEntropy(){
+		double entropy = 0;
+		//fill in missing parameters and formula
+		return entropy;
+	}
+	
+	public double getReconstructedEntropy(){
+		double entropy = 0;
+		//fill in missing parameters and formula
 		return entropy;
 	}
 
