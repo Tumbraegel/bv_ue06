@@ -6,6 +6,8 @@
 
 package bv_ws1718;
 
+import java.util.Arrays;
+
 public class Filter {
 	private final static int grayLevels = 256;
 	private static int[] histogram = new int[grayLevels];
@@ -43,7 +45,6 @@ public class Filter {
 						| (predictionError);
 				pixelA = pixelX;
 			}
-			getPredictionEntropy(dst);
 		}
 	}
 
@@ -59,7 +60,6 @@ public class Filter {
 				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
 				predecessorPixel = prediction;
 			}
-			getReconstructedEntropy(dst);
 		}
 	}
 
@@ -80,7 +80,6 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
-			getPredictionEntropy(dst);
 		}
 	}
 
@@ -96,7 +95,6 @@ public class Filter {
 				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
 				predecessorPixel = prediction;
 			}
-			getReconstructedEntropy(dst);
 		}
 
 	}
@@ -123,7 +121,6 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
-			getPredictionEntropy(dst);
 		}
 	}
 
@@ -163,7 +160,6 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
-			getPredictionEntropy(dst);
 		}
 	}
 
@@ -193,7 +189,6 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
-			getPredictionEntropy(dst);
 		}
 	}
 
@@ -233,7 +228,6 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
-			getPredictionEntropy(dst);
 		}
 
 	}
@@ -243,14 +237,15 @@ public class Filter {
 
 	}
 
-	public double getOriginalEntropy(RasterImage image) {
+	public double getEntropy(RasterImage image) {
 
 		double entropy = 0;
 		int amount = (image.width * image.height);
 
-		for (int origY = 0; origY < image.height; origY++) {
-			for (int origX = 0; origX < image.width; origX++) {
-				int grayLevel = (image.argb[origY * image.width + origX] >> 16) & 0xff;
+		Arrays.fill(histogram, 0);
+		for (int y = 0; y < image.height; y++) {
+			for (int x = 0; x < image.width; x++) {
+				int grayLevel = (image.argb[y * image.width + x] >> 16) & 0xff;
 				histogram[grayLevel]++;
 			}
 
@@ -264,52 +259,6 @@ public class Filter {
 				}
 			}
 
-		}
-		return entropy;
-	}
-
-	public double getPredictionEntropy(RasterImage dst) {
-		double entropy = 0;
-		int amount = (dst.width * dst.height);
-
-		for (int predicY = 0; predicY < dst.height; predicY++) {
-			for (int predicX = 0; predicX < dst.width; predicX++) {
-				int grayLevel = (dst.argb[predicY * dst.width + predicX] >> 16) & 0xff;
-				histogram[grayLevel]++;
-			}
-
-			// p is the probability of seeing this particular value
-			for (int i = 0; i < histogram.length; i++) {
-				int count = histogram[i];
-				double p = (double) count / amount;
-
-				if (p > 0) {
-					entropy = (entropy - p * Math.log(p) / Math.log(2));
-				}
-			}
-		}
-		return entropy;
-	}
-
-	public double getReconstructedEntropy(RasterImage dst) {
-		double entropy = 0;
-		int amount = (dst.width * dst.height);
-
-		for (int reconY = 0; reconY < dst.height; reconY++) {
-			for (int reconX = 0; reconX < dst.width; reconX++) {
-				int grayLevel = (dst.argb[reconY * dst.width + reconX] >> 16) & 0xff;
-				histogram[grayLevel]++;
-			}
-
-			// p is the probability of seeing this particular value
-			for (int i = 0; i < histogram.length; i++) {
-				int count = histogram[i];
-				double p = (double) count / amount;
-
-				if (p > 0) {
-					entropy = (entropy - p * Math.log(p) / Math.log(2));
-				}
-			}
 		}
 		return entropy;
 	}

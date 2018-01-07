@@ -10,10 +10,16 @@ import java.io.File;
 
 //import bv_ws1718.Filter.BorderProcessing;
 import bv_ws1718.Filter.PredictionType;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
@@ -27,6 +33,26 @@ public class FilterAppController {
 	private int noiseStrength;
 	private int kernelSize;
 	private RasterImage img;
+	
+	public enum StatsProperty {
+		origEntropy, predicEntropy, reconEntropy, MSE ;
+		
+	    private final SimpleStringProperty name;
+	    private final SimpleStringProperty value;
+	    
+	    private StatsProperty() {
+	        this.name = new SimpleStringProperty(name());
+	        this.value = new SimpleStringProperty("n/a");
+	    }
+	    
+	    public String getName() { return name.get(); }
+	    public String getValue() { return value.get(); }
+	    public void setValue(double value) { this.value.set(String.format("%.2f", value)); }
+	    public void setValue(int value) { this.value.set(String.format("%d", value)); }
+	}
+	
+	final ObservableList<StatsProperty> statsData = FXCollections.observableArrayList(StatsProperty.values());
+	
 
     @FXML
     private ComboBox<PredictionType> predictionSelection;
@@ -45,6 +71,15 @@ public class FilterAppController {
 
     @FXML
     private Label messageLabel;
+    
+    @FXML
+    private TableView<StatsProperty> statsTableView;
+    
+    @FXML
+    private TableColumn<StatsProperty, String> statsNamesColumn;
+
+    @FXML
+    private TableColumn<StatsProperty, String> statsValuesColumn;
 
     @FXML
     void openImage() {
@@ -70,6 +105,13 @@ public class FilterAppController {
     
 	@FXML
 	public void initialize() {
+		// initialize table view
+		statsNamesColumn.setCellValueFactory(new PropertyValueFactory<StatsProperty, String>("name"));
+		statsValuesColumn.setCellValueFactory(new PropertyValueFactory<StatsProperty, String>("value"));
+		statsTableView.setItems(statsData);
+		statsTableView.setSelectionModel(null);
+				
+				
 		// set combo boxes items
 		predictionSelection.getItems().addAll(PredictionType.values());
 		predictionSelection.setValue(PredictionType.COPY);
@@ -91,8 +133,10 @@ public class FilterAppController {
 		long startTime = System.currentTimeMillis();
 		
 		RasterImage origImg = new RasterImage(originalImageView); 
+		filter.getEntropy(origImg);
 		RasterImage predictionImg = new RasterImage(origImg.width, origImg.height); 
 		RasterImage filteredImg = new RasterImage(origImg.width, origImg.height); 
+		filter.getEntropy(filteredImg);
 		
 		filter.copy(origImg, filteredImg);		
 		
@@ -100,30 +144,37 @@ public class FilterAppController {
 		case COPY:
 			filter.copy(origImg, predictionImg);
 			filter.copy(predictionImg, filteredImg);
+			filter.getEntropy(origImg);
 			break;
 		case A:
 			filter.methodA(origImg, predictionImg);
 			filter.reconstructA(predictionImg, filteredImg);
+			filter.getEntropy(predictionImg);
 			break;
 		case B:
 			filter.methodB(origImg, predictionImg);
 			filter.reconstructB(predictionImg, filteredImg);
+			filter.getEntropy(predictionImg);
 			break;
 		case C:
 			filter.methodC(origImg, predictionImg);
 			filter.reconstructC(predictionImg, filteredImg);
+			filter.getEntropy(predictionImg);
 			break;
 		case AANDBMINUSC:
 			filter.methodAAndBMinusC(origImg, predictionImg);
 			filter.reconstructAAndBMinusC(predictionImg, filteredImg);
+			filter.getEntropy(predictionImg);
 			break;
 		case AANDBDIVIDEDBY2:
 			filter.methodAAndBDividedBy2(origImg, predictionImg);
 			filter.reconstructAAndBDividedBy2(predictionImg, filteredImg);
+			filter.getEntropy(predictionImg);
 			break;
 		case ADAPTIVE:
 			filter.methodAdaptive(origImg, predictionImg);
 			filter.reconstructAdaptive(predictionImg, filteredImg);
+			filter.getEntropy(predictionImg);
 			break;
 		default:
 			break;
@@ -131,6 +182,8 @@ public class FilterAppController {
 		
 		predictionImg.setToView(predictionImageView);
 		filteredImg.setToView(filteredImageView);
+		
+		statsTableView.refresh();
 		
 	   	messageLabel.setText("Processing time: " + (System.currentTimeMillis() - startTime) + " ms");
 	}
