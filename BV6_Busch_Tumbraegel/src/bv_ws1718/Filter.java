@@ -7,6 +7,8 @@
 package bv_ws1718;
 
 public class Filter {
+	private final static int grayLevels = 256;
+	private static int[] histogram = new int[grayLevels];
 
 	public enum PredictionType {
 		COPY("copy"), A("A (horizontal)"), B("B (vertikal)"), C("C (diagonal)"), AANDBMINUSC("A+B-C"), AANDBDIVIDEDBY2(
@@ -186,9 +188,27 @@ public class Filter {
 
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
+				calculateEntropy(dst);
 			}
 		}
 
+	}
+	
+	static double calculateEntropy(RasterImage image) {
+
+		double entropy = 0;
+		int amount = (image.width * image.height);
+
+		// p is the probability of seeing this particular value
+		for (int i = 0; i < histogram.length; i++) {
+			int count = histogram[i]++;
+			double p = (double) count / amount;
+
+			if (p > 0) {
+				entropy = (entropy - p * Math.log(p) / Math.log(2));
+			}
+		}
+		return entropy;
 	}
 
 	public void copy(RasterImage src, RasterImage dst) {
