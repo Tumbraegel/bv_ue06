@@ -43,6 +43,7 @@ public class Filter {
 						| (predictionError);
 				pixelA = pixelX;
 			}
+			getPredictionEntropy(dst);
 		}
 	}
 
@@ -58,6 +59,7 @@ public class Filter {
 				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
 				predecessorPixel = prediction;
 			}
+			getReconstructedEntropy(dst);
 		}
 	}
 
@@ -78,6 +80,7 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
+			getPredictionEntropy(dst);
 		}
 	}
 
@@ -93,6 +96,7 @@ public class Filter {
 				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
 				predecessorPixel = prediction;
 			}
+			getReconstructedEntropy(dst);
 		}
 
 	}
@@ -119,16 +123,8 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
+			getPredictionEntropy(dst);
 		}
-	}
-
-	private int noOverflow(int predictionError) {
-		if (predictionError <= 0) {
-			predictionError = 0;
-		} else if (predictionError >= 255) {
-			predictionError = 255;
-		}
-		return predictionError;
 	}
 
 	public void reconstructC(RasterImage src, RasterImage dst) {
@@ -167,6 +163,7 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
+			getPredictionEntropy(dst);
 		}
 	}
 
@@ -196,6 +193,7 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
+			getPredictionEntropy(dst);
 		}
 	}
 
@@ -235,6 +233,7 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
+			getPredictionEntropy(dst);
 		}
 
 	}
@@ -251,7 +250,7 @@ public class Filter {
 
 		// p is the probability of seeing this particular value
 		for (int i = 0; i < histogram.length; i++) {
-			int count = histogram[i]++;
+			int count = histogram[i];
 			double p = (double) count / amount;
 
 			if (p > 0) {
@@ -261,16 +260,45 @@ public class Filter {
 		return entropy;
 	}
 	
-	public double getPredictionEntropy(){
+	public double getPredictionEntropy(RasterImage dst){
 		double entropy = 0;
-		//fill in missing parameters and formula
+		int amount = (dst.width * dst.height);
+
+		// p is the probability of seeing this particular value
+		for (int i = 0; i < histogram.length; i++) {
+			int count = histogram[i];
+			double p = (double) count / amount;
+
+			if (p > 0) {
+				entropy = (entropy - p * Math.log(p) / Math.log(2));
+			}
+		}
 		return entropy;
 	}
 	
-	public double getReconstructedEntropy(){
+	public double getReconstructedEntropy(RasterImage dst){
 		double entropy = 0;
-		//fill in missing parameters and formula
+		int amount = (dst.width * dst.height);
+
+		// p is the probability of seeing this particular value
+		for (int i = 0; i < histogram.length; i++) {
+			int count = histogram[i];
+			double p = (double) count / amount;
+
+			if (p > 0) {
+				entropy = (entropy - p * Math.log(p) / Math.log(2));
+			}
+		}
 		return entropy;
+	}
+	
+	private int noOverflow(int predictionError) {
+		if (predictionError <= 0) {
+			predictionError = 0;
+		} else if (predictionError >= 255) {
+			predictionError = 255;
+		}
+		return predictionError;
 	}
 
 	public void copy(RasterImage src, RasterImage dst) {
