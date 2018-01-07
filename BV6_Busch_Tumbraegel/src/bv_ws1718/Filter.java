@@ -48,15 +48,15 @@ public class Filter {
 
 	public void reconstructA(RasterImage src, RasterImage dst) {
 		int predecessorPixel;
-		int predicationError, predication;
+		int predictionError, prediction;
 		for (int y = 0; y < src.height; y++) {
 			predecessorPixel = 128;
 			for (int x = 0; x < src.width; x++) {
-				predicationError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
-				predication = predicationError + predecessorPixel;
-				predication = noOverflow(predication);
-				dst.argb[y * dst.width + x] = 0xff000000 | (predication << 16) | (predication << 8) | (predication);
-				predecessorPixel = predication;
+				predictionError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
+				prediction = predictionError + predecessorPixel;
+				prediction = noOverflow(prediction);
+				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
+				predecessorPixel = prediction;
 			}
 		}
 	}
@@ -83,15 +83,15 @@ public class Filter {
 
 	public void reconstructB(RasterImage src, RasterImage dst) {
 		int predecessorPixel;
-		int predicationError, predication;
+		int predictionError, prediction;
 		for (int y = 0; y < src.height; y++) {
 			predecessorPixel = 128;
 			for (int x = 0; x < src.width; x++) {
-				predicationError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
-				predication = predicationError + predecessorPixel;
-				predication = noOverflow(predication);
-				dst.argb[y * dst.width + x] = 0xff000000 | (predication << 16) | (predication << 8) | (predication);
-				predecessorPixel = predication;
+				predictionError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
+				prediction = predictionError + predecessorPixel;
+				prediction = noOverflow(prediction);
+				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
+				predecessorPixel = prediction;
 			}
 		}
 
@@ -268,12 +268,4 @@ public class Filter {
 			dst.argb[i] = src.argb[i];
 		}
 	}
-
-	// private int noOverflow(int value) {
-	// if (value <= 0)
-	// value = 0;
-	// else if (value >= 255)
-	// value = 255;
-	// return value;
-	// }
 }

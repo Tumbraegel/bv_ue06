@@ -29,7 +29,7 @@ public class FilterAppController {
 	private RasterImage img;
 
     @FXML
-    private ComboBox<PredictionType> predicationSelection;
+    private ComboBox<PredictionType> predictionSelection;
 
 //    @FXML
 //    private ComboBox<BorderProcessing> borderProcessingSelection;
@@ -38,7 +38,7 @@ public class FilterAppController {
     private ImageView originalImageView;
 
     @FXML
-    private ImageView predicationImageView;
+    private ImageView predictionImageView;
 
     @FXML
     private ImageView filteredImageView;
@@ -63,7 +63,7 @@ public class FilterAppController {
     }
 
     @FXML
-    void predicationChanged() {
+    void predictionChanged() {
     	processImages();
     }
 
@@ -71,11 +71,11 @@ public class FilterAppController {
 	@FXML
 	public void initialize() {
 		// set combo boxes items
-		predicationSelection.getItems().addAll(PredictionType.values());
-		predicationSelection.setValue(PredictionType.COPY);
+		predictionSelection.getItems().addAll(PredictionType.values());
+		predictionSelection.setValue(PredictionType.COPY);
 		
 		// initialize parameters
-		predicationChanged();
+		predictionChanged();
 		
 		// load and process default image
 		img = new RasterImage(new File(initialFileName));
@@ -91,45 +91,45 @@ public class FilterAppController {
 		long startTime = System.currentTimeMillis();
 		
 		RasterImage origImg = new RasterImage(originalImageView); 
-		RasterImage predicationImg = new RasterImage(origImg.width, origImg.height); 
+		RasterImage predictionImg = new RasterImage(origImg.width, origImg.height); 
 		RasterImage filteredImg = new RasterImage(origImg.width, origImg.height); 
 		
 		filter.copy(origImg, filteredImg);		
 		
-		switch(predicationSelection.getValue()) {
+		switch(predictionSelection.getValue()) {
 		case COPY:
-			filter.copy(origImg, predicationImg);
-			filter.copy(predicationImg, filteredImg);
+			filter.copy(origImg, predictionImg);
+			filter.copy(predictionImg, filteredImg);
 			break;
 		case A:
-			filter.methodA(origImg, predicationImg);
-			filter.reconstructA(predicationImg, filteredImg);
+			filter.methodA(origImg, predictionImg);
+			filter.reconstructA(predictionImg, filteredImg);
 			break;
 		case B:
-			filter.methodB(origImg, predicationImg);
-			filter.reconstructB(predicationImg, filteredImg);
+			filter.methodB(origImg, predictionImg);
+			filter.reconstructB(predictionImg, filteredImg);
 			break;
 		case C:
-			filter.methodC(origImg, predicationImg);
-			filter.reconstructC(predicationImg, filteredImg);
+			filter.methodC(origImg, predictionImg);
+			filter.reconstructC(predictionImg, filteredImg);
 			break;
 		case AANDBMINUSC:
-			filter.methodAAndBMinusC(origImg, predicationImg);
-			filter.reconstructAAndBMinusC(predicationImg, filteredImg);
+			filter.methodAAndBMinusC(origImg, predictionImg);
+			filter.reconstructAAndBMinusC(predictionImg, filteredImg);
 			break;
 		case AANDBDIVIDEDBY2:
-			filter.methodAAndBDividedBy2(origImg, predicationImg);
-			filter.reconstructAAndBDividedBy2(predicationImg, filteredImg);
+			filter.methodAAndBDividedBy2(origImg, predictionImg);
+			filter.reconstructAAndBDividedBy2(predictionImg, filteredImg);
 			break;
 		case ADAPTIV:
-			filter.methodAdaptive(origImg, predicationImg);
-			filter.reconstructAdaptive(predicationImg, filteredImg);
+			filter.methodAdaptive(origImg, predictionImg);
+			filter.reconstructAdaptive(predictionImg, filteredImg);
 			break;
 		default:
 			break;
 		}
 		
-		predicationImg.setToView(predicationImageView);
+		predictionImg.setToView(predictionImageView);
 		filteredImg.setToView(filteredImageView);
 		
 	   	messageLabel.setText("Processing time: " + (System.currentTimeMillis() - startTime) + " ms");
