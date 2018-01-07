@@ -252,7 +252,7 @@ public class Filter {
 					pixelB = dst.argb[(y - 1) * dst.width + (x)] & 0xFF;
 				}
 				predictionError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
-				prediction = predictionError + (pixelA + pixelB)/2;
+				prediction = predictionError + (pixelA + pixelB) / 2;
 				prediction = noOverflow(prediction);
 				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
 			}
@@ -315,16 +315,16 @@ public class Filter {
 					pixelB = dst.argb[(y - 1) * dst.width + (x)] & 0xFF;
 					pixelC = dst.argb[(y - 1) * dst.width + (x - 1)] & 0xFF;
 				}
-				
+
 				predictionError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
-				
+
 				int firstCase = Math.abs(pixelA - pixelC);
 				int secondCase = Math.abs(pixelB - pixelC);
-				
+
 				if (firstCase < secondCase)
 					prediction = pixelB - predictionError;
 				else
-					prediction = pixelA -predictionError;
+					prediction = pixelA - predictionError;
 
 				prediction = noOverflow(prediction);
 				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
@@ -345,18 +345,18 @@ public class Filter {
 				int grayLevel = (image.argb[y * image.width + x] >> 16) & 0xff;
 				histogram[grayLevel]++;
 			}
-
-			// p is the probability of seeing this particular value
-			for (int i = 0; i < histogram.length; i++) {
-				int count = histogram[i];
-				double p = (double) count / amount;
-
-				if (p > 0) {
-					entropy = (entropy - p * Math.log(p) / Math.log(2));
-				}
-			}
-
 		}
+
+		// p is the probability of seeing this particular value
+		for (int i = 0; i < histogram.length; i++) {
+			int count = histogram[i];
+			double p = (double) count / amount;
+
+			if (p > 0) {
+				entropy = (entropy - p * Math.log(p) / Math.log(2));
+			}
+		}
+
 		return entropy;
 	}
 
@@ -380,11 +380,11 @@ public class Filter {
 		float mse = 0.0f;
 		for (int y = 0; y < origImg.height; y++) {
 			for (int x = 0; x < origImg.width; x++) {
-				int origPixel = origImg.argb[y*origImg.width+x]& 0xff;
-				int filterdPixel = filteredImg.argb[y*origImg.width+x]& 0xff;
-				mse += (origPixel-filterdPixel);
+				int origPixel = origImg.argb[y * origImg.width + x] & 0xff;
+				int filterdPixel = filteredImg.argb[y * origImg.width + x] & 0xff;
+				mse += (origPixel - filterdPixel);
 			}
 		}
-		return mse/origImg.argb.length;
+		return mse / origImg.argb.length;
 	}
 }
