@@ -12,7 +12,7 @@ public class Filter {
 
 	public enum PredictionType {
 		COPY("copy"), A("A (horizontal)"), B("B (vertikal)"), C("C (diagonal)"), AANDBMINUSC("A+B-C"), AANDBDIVIDEDBY2(
-				"(A+B/2)"), ADAPTIV("adaptiv");
+				"(A+B/2)"), ADAPTIVE("adaptiv");
 
 		private final String name;
 
@@ -248,50 +248,72 @@ public class Filter {
 		double entropy = 0;
 		int amount = (image.width * image.height);
 
-		// p is the probability of seeing this particular value
-		for (int i = 0; i < histogram.length; i++) {
-			int count = histogram[i];
-			double p = (double) count / amount;
-
-			if (p > 0) {
-				entropy = (entropy - p * Math.log(p) / Math.log(2));
+		for (int origY = 0; origY < image.height; origY++) {
+			for (int origX = 0; origX < image.width; origX++) {
+				int grayLevel = (image.argb[origY * image.width + origX] >> 16) & 0xff;
+				histogram[grayLevel]++;
 			}
+
+			// p is the probability of seeing this particular value
+			for (int i = 0; i < histogram.length; i++) {
+				int count = histogram[i];
+				double p = (double) count / amount;
+
+				if (p > 0) {
+					entropy = (entropy - p * Math.log(p) / Math.log(2));
+				}
+			}
+
 		}
 		return entropy;
 	}
-	
-	public double getPredictionEntropy(RasterImage dst){
+
+	public double getPredictionEntropy(RasterImage dst) {
 		double entropy = 0;
 		int amount = (dst.width * dst.height);
 
-		// p is the probability of seeing this particular value
-		for (int i = 0; i < histogram.length; i++) {
-			int count = histogram[i];
-			double p = (double) count / amount;
+		for (int predicY = 0; predicY < dst.height; predicY++) {
+			for (int predicX = 0; predicX < dst.width; predicX++) {
+				int grayLevel = (dst.argb[predicY * dst.width + predicX] >> 16) & 0xff;
+				histogram[grayLevel]++;
+			}
 
-			if (p > 0) {
-				entropy = (entropy - p * Math.log(p) / Math.log(2));
+			// p is the probability of seeing this particular value
+			for (int i = 0; i < histogram.length; i++) {
+				int count = histogram[i];
+				double p = (double) count / amount;
+
+				if (p > 0) {
+					entropy = (entropy - p * Math.log(p) / Math.log(2));
+				}
 			}
 		}
 		return entropy;
 	}
-	
-	public double getReconstructedEntropy(RasterImage dst){
+
+	public double getReconstructedEntropy(RasterImage dst) {
 		double entropy = 0;
 		int amount = (dst.width * dst.height);
 
-		// p is the probability of seeing this particular value
-		for (int i = 0; i < histogram.length; i++) {
-			int count = histogram[i];
-			double p = (double) count / amount;
+		for (int reconY = 0; reconY < dst.height; reconY++) {
+			for (int reconX = 0; reconX < dst.width; reconX++) {
+				int grayLevel = (dst.argb[reconY * dst.width + reconX] >> 16) & 0xff;
+				histogram[grayLevel]++;
+			}
 
-			if (p > 0) {
-				entropy = (entropy - p * Math.log(p) / Math.log(2));
+			// p is the probability of seeing this particular value
+			for (int i = 0; i < histogram.length; i++) {
+				int count = histogram[i];
+				double p = (double) count / amount;
+
+				if (p > 0) {
+					entropy = (entropy - p * Math.log(p) / Math.log(2));
+				}
 			}
 		}
 		return entropy;
 	}
-	
+
 	private int noOverflow(int predictionError) {
 		if (predictionError <= 0) {
 			predictionError = 0;

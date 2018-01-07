@@ -121,7 +121,7 @@ public class FilterAppController {
 			filter.methodAAndBDividedBy2(origImg, predictionImg);
 			filter.reconstructAAndBDividedBy2(predictionImg, filteredImg);
 			break;
-		case ADAPTIV:
+		case ADAPTIVE:
 			filter.methodAdaptive(origImg, predictionImg);
 			filter.reconstructAdaptive(predictionImg, filteredImg);
 			break;

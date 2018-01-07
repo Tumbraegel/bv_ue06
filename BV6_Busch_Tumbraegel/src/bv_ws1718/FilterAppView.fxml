@@ -48,11 +48,11 @@
                   </ScrollPane>
                </content>
             </TitledPane>
-            <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Predication Image" GridPane.columnIndex="1">
+            <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Prediction Image" GridPane.columnIndex="1">
                <content>
                   <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pannable="true">
                      <content>
-                        <ImageView fx:id="predicationImageView" pickOnBounds="true" preserveRatio="true" smooth="false" />
+                        <ImageView fx:id="predictionImageView" pickOnBounds="true" preserveRatio="true" smooth="false" />
                      </content>
                   </ScrollPane>
                </content>
@@ -79,7 +79,7 @@
                 <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ComboBox fx:id="predicationSelection" onAction="#predicationChanged" />
+                  <ComboBox fx:id="predictionSelection" onAction="#predictionChanged" />
                </children>
             </GridPane>
             <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
