@@ -99,24 +99,31 @@ public class FilterAppController {
 		switch(predicationSelection.getValue()) {
 		case COPY:
 			filter.copy(origImg, predicationImg);
+			filter.copy(predicationImg, filteredImg);
 			break;
 		case A:
 			filter.methodA(origImg, predicationImg);
+			filter.reconstructA(predicationImg, filteredImg);
 			break;
 		case B:
 			filter.methodB(origImg, predicationImg);
+			filter.reconstructB(predicationImg, filteredImg);
 			break;
 		case C:
 			filter.methodC(origImg, predicationImg);
+			filter.reconstructC(predicationImg, filteredImg);
 			break;
 		case AANDBMINUSC:
 			filter.methodAAndBMinusC(origImg, predicationImg);
+			filter.reconstructAAndBMinusC(predicationImg, filteredImg);
 			break;
 		case AANDBDIVIDEDBY2:
 			filter.methodAAndBDividedBy2(origImg, predicationImg);
+			filter.reconstructAAndBDividedBy2(predicationImg, filteredImg);
 			break;
 		case ADAPTIV:
 			filter.methodAdaptive(origImg, predicationImg);
+			filter.reconstructAdaptive(predicationImg, filteredImg);
 			break;
 		default:
 			break;
