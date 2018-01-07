@@ -45,6 +45,10 @@ public class Filter {
 						| (predictionError);
 				pixelA = pixelX;
 			}
+<<<<<<< HEAD
+=======
+			// getPredictionEntropy(dst);
+>>>>>>> 6db0afe115efd7f2fe63929f231dc050ca220254
 		}
 	}
 
@@ -60,6 +64,10 @@ public class Filter {
 				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
 				predecessorPixel = prediction;
 			}
+<<<<<<< HEAD
+=======
+			// getReconstructedEntropy(dst);
+>>>>>>> 6db0afe115efd7f2fe63929f231dc050ca220254
 		}
 	}
 
@@ -70,7 +78,7 @@ public class Filter {
 		for (int y = 0; y < src.height; y++) {
 			for (int x = 0; x < src.width; x++) {
 				if (y == 0) {
-					pixelB = 0;
+					pixelB = 128;
 				} else {
 					pixelB = src.argb[(y - 1) * src.width + x] & 0xFF;
 				}
@@ -80,21 +88,34 @@ public class Filter {
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
+<<<<<<< HEAD
+=======
+			// getPredictionEntropy(dst);
+>>>>>>> 6db0afe115efd7f2fe63929f231dc050ca220254
 		}
 	}
 
 	public void reconstructB(RasterImage src, RasterImage dst) {
 		int predecessorPixel;
-		int predictionError, prediction;
+		int predictionError;
+		int prediction;
 		for (int y = 0; y < src.height; y++) {
-			predecessorPixel = 128;
 			for (int x = 0; x < src.width; x++) {
+				if (y == 0) {
+					predecessorPixel = 128;
+				} else {
+					predecessorPixel = dst.argb[(y - 1) * dst.width + x] & 0xFF;
+				}
 				predictionError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
 				prediction = predictionError + predecessorPixel;
 				prediction = noOverflow(prediction);
 				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
-				predecessorPixel = prediction;
+
 			}
+<<<<<<< HEAD
+=======
+			// getReconstructedEntropy(dst);
+>>>>>>> 6db0afe115efd7f2fe63929f231dc050ca220254
 		}
 
 	}
@@ -106,11 +127,7 @@ public class Filter {
 		for (int y = 0; y < src.height; y++) {
 			for (int x = 0; x < src.width; x++) {
 				// check margins
-				if (x < 1 && y < 1)
-					pixelC = 128;
-				else if (x < 1 && y >= 1)
-					pixelC = 128;
-				else if (y < 1 && x >= 1)
+				if ((x < 1 && (y < 1 || y >= 1))||y<1&&x>=1)
 					pixelC = 128;
 				else
 					pixelC = src.argb[(y - 1) * src.width + (x - 1)] & 0xFF;
@@ -118,14 +135,34 @@ public class Filter {
 				pixelX = src.argb[y * src.width + x] & 0xFF;
 				predictionError = pixelC - pixelX + 128;
 				predictionError = noOverflow(predictionError);
-				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
+				dst.argb[y * dst.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8)
 						| (predictionError);
 			}
+<<<<<<< HEAD
+=======
+//			getPredictionEntropy(dst);
+>>>>>>> 6db0afe115efd7f2fe63929f231dc050ca220254
 		}
 	}
 
 	public void reconstructC(RasterImage src, RasterImage dst) {
-		// TODO Auto-generated method stub
+		int predecessorPixel;
+		int predictionError;
+		int prediction;
+		for (int y = 0; y < src.height; y++) {
+			for (int x = 0; x < src.width; x++) {
+				if (y == 0 || x == 0) {
+					predecessorPixel = 128;
+				} else {
+					predecessorPixel = dst.argb[(y - 1) * dst.width + (x -1)] & 0xFF;
+				}
+				predictionError = (src.argb[y * src.width + (x)] & 0xFF) - 128;
+				prediction = predecessorPixel-predictionError;
+				prediction = noOverflow(prediction);
+				dst.argb[y * dst.width + x] = 0xff000000 | (prediction << 16) | (prediction << 8) | (prediction);
+
+			}
+		}
 
 	}
 
