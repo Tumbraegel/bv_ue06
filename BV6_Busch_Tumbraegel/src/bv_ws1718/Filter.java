@@ -32,10 +32,11 @@ public class Filter {
 		int pixelA, pixelX;
 		int predictionError;
 		for (int y = 0; y < src.height; y++) {
-			pixelA = 0;
+			pixelA = 128;
 			for (int x = 0; x < src.width; x++) {
 				pixelX = src.argb[y * src.width + x] & 0xFF;
-				predictionError = pixelA - pixelX + 128;
+				predictionError = pixelX - pixelA + 128;
+				predictionError = noOverflow(predictionError);
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8) | (predictionError);
 				pixelA = pixelX;
 			}
@@ -54,7 +55,8 @@ public class Filter {
 					pixelB = src.argb[(y - 1) * src.width + x]  & 0xFF;
 				}
 				pixelX = src.argb[y * src.width + x]  & 0xFF;
-				predictionError = pixelB - pixelX + 128;
+				predictionError = pixelX - pixelB + 128;
+				predictionError = noOverflow(predictionError);
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8) | (predictionError);
 			}
 		}
@@ -76,10 +78,20 @@ public class Filter {
 				else pixelC = src.argb[(y - 1) * src.width + (x - 1)]  & 0xFF;
 				
 				pixelX = src.argb[y * src.width + x] & 0xFF;
-				predictionError = pixelX - pixelC + 128;
+				predictionError = pixelC - pixelX + 128;
+				predictionError = noOverflow(predictionError);
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8) | (predictionError);
 			}
 		}
+	}
+
+	private int noOverflow(int predictionError) {
+		if(predictionError <= 0) {
+			predictionError =0;
+		}else if (predictionError >= 255) {
+			predictionError = 255;
+		}
+		return predictionError;
 	}
 	
 	public void methodAAndBMinusC(RasterImage src, RasterImage dst){
@@ -109,6 +121,7 @@ public class Filter {
 				
 				pixelX = src.argb[y * src.width + x] & 0xFF;
 				predictionError = pixelX - (pixelA + pixelB - pixelC) + 128;
+				predictionError = noOverflow(predictionError);
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8) | (predictionError);
 			}
 		}	
@@ -137,6 +150,7 @@ public class Filter {
 				
 				pixelX = src.argb[y * src.width + x] & 0xFF;
 				predictionError = pixelX - ((pixelA + pixelB)/2) + 128;
+				predictionError = noOverflow(predictionError);
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8) | (predictionError);
 			}
 		}	
@@ -175,6 +189,8 @@ public class Filter {
 					predictionError = pixelB - pixelX + 128;
 				else
 					predictionError = pixelA - pixelX + 128;
+				
+				predictionError = noOverflow(predictionError);
 				
 				dst.argb[y * src.width + x] = 0xff000000 | (predictionError << 16) | (predictionError << 8) | (predictionError);
 			}
