@@ -168,8 +168,8 @@ public class Filter {
 					pixelC = src.argb[(y - 1) * src.width + (x - 1)]  & 0xFF;
 				}
 				
-				int firstCase = (pixelA - pixelC); 
-				int secondCase = (pixelB - pixelC);
+				int firstCase = Math.abs(pixelA - pixelC); 
+				int secondCase = Math.abs(pixelB - pixelC);
 				
 				if(firstCase < secondCase)
 					predictionError = pixelB - pixelX + 128;
